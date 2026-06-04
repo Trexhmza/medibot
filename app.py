@@ -83,9 +83,9 @@ st.markdown("""
 
 with st.sidebar:
     st.markdown("<div class='sidebar-content'>", unsafe_allow_html=True)
-    st.image("https://cdn-icons-png.flaticon.com/512/2966/2966327.png", width=80)
-    st.markdown("<h2 style='color: white; margin-top: 0;'>MediBot</h2>", unsafe_allow_html=True)
-    st.markdown("<span class='model-badge'>llama-3.3-70b</span>", unsafe_allow_html=True)
+    st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>"
+                f"<img src='https://cdn-icons-png.flaticon.com/512/2966/2966327.png' width='80'>"
+                f"<h2 style='color: white; margin: 0;'>MediBot</h2></div>", unsafe_allow_html=True)
     st.divider()
 
     st.markdown("**ℹ️ About**")
