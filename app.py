@@ -83,11 +83,6 @@ st.markdown("""
 
 with st.sidebar:
     st.markdown("<div class='sidebar-content'>", unsafe_allow_html=True)
-    st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>"
-                f"<img src='https://cdn-icons-png.flaticon.com/512/2966/2966327.png' width='80'>"
-                f"<h2 style='color: white; margin: 0;'>MediBot</h2></div>", unsafe_allow_html=True)
-    st.divider()
-
     st.markdown("**ℹ️ About**")
     st.info("MediBot provides general health information. Always consult a professional for medical advice.")
 
