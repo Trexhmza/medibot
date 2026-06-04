@@ -1,6 +1,7 @@
 ﻿import streamlit as st
 from groq import Groq
 import os
+import random
 from dotenv import load_dotenv
 
 load_dotenv("gemini.env")
@@ -81,23 +82,23 @@ with st.sidebar:
 
     st.divider()
     st.markdown("**📋 Quick Questions**")
-    import random
-    all_qs = [
-        "What are symptoms of dehydration?",
-        "How to lower blood pressure naturally?",
-        "What vitamins boost immunity?",
-        "First aid for minor burns?",
-        "Signs of a vitamin D deficiency?",
-        "How to improve sleep quality?",
-        "Foods high in iron?",
-        "What helps with headaches?",
-        "Benefits of drinking water?",
-        "How to reduce stress naturally?",
-        "Symptoms of food poisoning?",
-        "What is normal blood sugar range?",
-    ]
-    qs = random.sample(all_qs, 4)
-    for q in qs:
+    if "sample_qs" not in st.session_state:
+        all_qs = [
+            "What are symptoms of dehydration?",
+            "How to lower blood pressure naturally?",
+            "What vitamins boost immunity?",
+            "First aid for minor burns?",
+            "Signs of a vitamin D deficiency?",
+            "How to improve sleep quality?",
+            "Foods high in iron?",
+            "What helps with headaches?",
+            "Benefits of drinking water?",
+            "How to reduce stress naturally?",
+            "Symptoms of food poisoning?",
+            "What is normal blood sugar range?",
+        ]
+        st.session_state.sample_qs = random.sample(all_qs, 4)
+    for q in st.session_state.sample_qs:
         if st.button(q, use_container_width=True):
             st.session_state.quick_q = q
     st.divider()
@@ -118,12 +119,10 @@ for msg in st.session_state.messages:
 
 sys_prompt = "You are a medical info assistant. Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Do not diagnose or prescribe."
 
-prompt = None
+prompt = st.chat_input("Ask your medical question...")
 if st.session_state.quick_q:
     prompt = st.session_state.quick_q
     st.session_state.quick_q = None
-else:
-    prompt = st.chat_input("Ask your medical question...")
 
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
