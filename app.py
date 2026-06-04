@@ -4,7 +4,13 @@ import os
 import random
 from dotenv import load_dotenv
 import base64
+import functools
 from streamlit.components.v1 import html as html_component
+
+@st.cache_data(show_spinner=False)
+def get_avatar_b64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
 load_dotenv("gemini.env")
 api_key = os.getenv("GROQ_API_KEY")
@@ -419,8 +425,7 @@ with st.sidebar:
 
     for key, doc in DOCTORS.items():
         active = "active" if key == st.session_state.assistant else ""
-        with open(doc["avatar"], "rb") as f:
-            avatar_b64 = base64.b64encode(f.read()).decode()
+        avatar_b64 = get_avatar_b64(doc["avatar"])
         card = f"""
         <div class='doctor-card {active}'>
             <img src='data:image/png;base64,{avatar_b64}' />
