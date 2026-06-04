@@ -81,12 +81,22 @@ with st.sidebar:
 
     st.divider()
     st.markdown("**📋 Quick Questions**")
-    qs = [
+    import random
+    all_qs = [
         "What are symptoms of dehydration?",
         "How to lower blood pressure naturally?",
         "What vitamins boost immunity?",
         "First aid for minor burns?",
+        "Signs of a vitamin D deficiency?",
+        "How to improve sleep quality?",
+        "Foods high in iron?",
+        "What helps with headaches?",
+        "Benefits of drinking water?",
+        "How to reduce stress naturally?",
+        "Symptoms of food poisoning?",
+        "What is normal blood sugar range?",
     ]
+    qs = random.sample(all_qs, 4)
     for q in qs:
         if st.button(q, use_container_width=True):
             st.session_state.quick_q = q
