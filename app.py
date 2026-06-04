@@ -195,27 +195,43 @@ st.markdown("""
         box-shadow: 0 8px 25px rgba(230, 57, 70, 0.08) !important;
     }
 
-    /* Assistant bubble */
+    /* Assistant bubble - shared defaults */
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) > div:first-child {
-        background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(18, 18, 18, 0.95)) !important;
-        border-left: 3px solid #E63946 !important;
-        border-radius: 0 14px 14px 14px !important;
         padding: 1rem 1.25rem !important;
-        color: #ece8e8 !important;
         font-family: 'Hanken Grotesk', sans-serif;
         font-size: 15px; line-height: 1.65;
         max-width: 82%;
         backdrop-filter: blur(8px) !important;
         -webkit-backdrop-filter: blur(8px) !important;
         transition: transform 0.2s, box-shadow 0.2s !important;
-        animation: glowPulse 3s ease-in-out infinite !important;
-        border-top: none !important;
-        border-right: none !important;
-        border-bottom: none !important;
     }
-    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) > div:first-child:hover {
+    /* Dr. Sarah — warm, soft */
+    div[data-testid="stChatMessage"]:has(.msg-female) > div:first-child {
+        background: linear-gradient(135deg, rgba(42, 18, 18, 0.95), rgba(30, 12, 12, 0.95)) !important;
+        border-left: 3px solid #E63946 !important;
+        border-radius: 0 18px 18px 18px !important;
+        color: #f5ecec !important;
+        box-shadow: 0 2px 12px rgba(230, 57, 70, 0.08) !important;
+        animation: glowPulse 3s ease-in-out infinite !important;
+    }
+    div[data-testid="stChatMessage"]:has(.msg-female) > div:first-child:hover {
         transform: translateY(-1px) !important;
         box-shadow: 0 8px 25px rgba(230, 57, 70, 0.12) !important;
+    }
+    /* Dr. James — cold, sharp, clinical */
+    div[data-testid="stChatMessage"]:has(.msg-male) > div:first-child {
+        background: linear-gradient(135deg, rgba(12, 14, 18, 0.98), rgba(8, 10, 14, 0.98)) !important;
+        border-left: 3px solid #3a4a6b !important;
+        border-radius: 2px 10px 10px 10px !important;
+        color: #c8ccd0 !important;
+        box-shadow: 0 1px 4px rgba(58, 74, 107, 0.06) !important;
+        animation: none !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.01em;
+    }
+    div[data-testid="stChatMessage"]:has(.msg-male) > div:first-child:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(58, 74, 107, 0.1) !important;
     }
 
     /* Chat input */
@@ -418,6 +434,7 @@ with st.sidebar:
         st.markdown(card, unsafe_allow_html=True)
         if st.button(f"Select {doc['name']}", key=f"sel_{key}", use_container_width=True):
             st.session_state.assistant = key
+            st.session_state.collapse_sidebar = True
             st.rerun()
 
     st.divider()
@@ -432,14 +449,27 @@ with st.sidebar:
         st.rerun()
 
 for msg in st.session_state.messages:
-    avatar = USER_AVATAR if msg["role"] == "user" else current_doc["avatar"]
+    if msg["role"] == "user":
+        avatar = USER_AVATAR
+        marker = ""
+    else:
+        doc_key = msg.get("doctor", st.session_state.assistant)
+        avatar = DOCTORS[doc_key]["avatar"]
+        marker = f"<span class='msg-{doc_key}'></span>"
     with st.chat_message(msg["role"], avatar=avatar):
-        st.markdown(msg["content"])
+        st.markdown(f"{marker}{msg['content']}", unsafe_allow_html=True)
 
-html_component("""
+collapse_js = ""
+if st.session_state.pop("collapse_sidebar", False):
+    collapse_js = """
+    const closeBtn = document.querySelector('button[data-testid="stSidebarCollapseButton"], section[data-testid="stSidebar"] button[kind="headerNoPadding"]');
+    if (closeBtn) setTimeout(() => closeBtn.click(), 100);
+    """
+html_component(f"""
 <script>
     const el = document.querySelector('[data-testid="stAppViewContainer"]');
     if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
+    {collapse_js}
 </script>
 """, height=0)
 
@@ -465,8 +495,9 @@ if prompt:
                     ]
                 )
                 reply = response.choices[0].message.content
-                st.markdown(reply)
+                marker = f"<span class='msg-{st.session_state.assistant}'></span>"
+                st.markdown(f"{marker}{reply}", unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"API error: {e}")
                 reply = ""
-    st.session_state.messages.append({"role": "assistant", "content": reply})
+    st.session_state.messages.append({"role": "assistant", "content": reply, "doctor": st.session_state.assistant})
