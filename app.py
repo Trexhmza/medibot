@@ -35,12 +35,12 @@ st.markdown("""
         margin-bottom: 1.5rem;
     }
     .stChatMessage {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.12);
         border-radius: 12px;
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1rem;
         margin: 0.5rem 0;
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
     }
     .stChatInput {
         background: rgba(255, 255, 255, 0.08);
