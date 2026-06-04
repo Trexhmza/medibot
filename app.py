@@ -17,14 +17,8 @@ client = Groq(api_key=api_key)
 
 st.set_page_config(page_title="MediBot", page_icon="🩺", layout="wide")
 
-ASSISTANT_AVATAR = None
-for ext in ["png", "jpg", "jpeg", "webp"]:
-    p = Path(f"assistant.{ext}")
-    if p.exists():
-        ASSISTANT_AVATAR = str(p)
-        break
-if not ASSISTANT_AVATAR:
-    ASSISTANT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23E63946'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='50' fill='white'%3E🩺%3C/text%3E%3C/svg%3E"
+USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
+ASSISTANT_AVATAR = "Gemini_Generated_Image_q64wzmq64wzmq64w.png"
 
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -339,7 +333,7 @@ if "quick_q" not in st.session_state:
     st.session_state.quick_q = None
 
 for msg in st.session_state.messages:
-    avatar = "🧑" if msg["role"] == "user" else ASSISTANT_AVATAR
+    avatar = USER_AVATAR if msg["role"] == "user" else ASSISTANT_AVATAR
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
 
@@ -361,7 +355,7 @@ if st.session_state.quick_q:
 
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar="🧑"):
+    with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         with st.spinner("Thinking..."):
