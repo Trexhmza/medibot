@@ -2,6 +2,7 @@
 from groq import Groq
 import os
 import random
+from pathlib import Path
 from dotenv import load_dotenv
 from streamlit.components.v1 import html as html_component
 
@@ -14,7 +15,16 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
-st.set_page_config(page_title="VitaAI Concierge", page_icon="🩺", layout="wide")
+st.set_page_config(page_title="MediBot", page_icon="🩺", layout="wide")
+
+ASSISTANT_AVATAR = None
+for ext in ["png", "jpg", "jpeg", "webp"]:
+    p = Path(f"assistant.{ext}")
+    if p.exists():
+        ASSISTANT_AVATAR = str(p)
+        break
+if not ASSISTANT_AVATAR:
+    ASSISTANT_AVATAR = "🩺"
 
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -60,12 +70,15 @@ st.markdown("""
     section[data-testid="stSidebar"] > div {
         background: transparent !important;
     }
+    div[data-testid="stSidebarUserContent"] {
+        padding-top: 0 !important;
+    }
     .sidebar-brand {
         display: flex;
         align-items: center;
         gap: 12px;
-        margin-bottom: 2rem;
-        padding: 0 0.5rem;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem;
     }
     .sidebar-brand-icon {
         width: 48px;
@@ -79,7 +92,7 @@ st.markdown("""
     }
     .sidebar-brand-text h2 {
         font-family: 'Montserrat', sans-serif;
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 600;
         color: #0D3B40;
         margin: 0;
@@ -87,35 +100,53 @@ st.markdown("""
     }
     .sidebar-brand-text p {
         font-family: 'Inter', sans-serif;
-        font-size: 14px;
+        font-size: 13px;
         color: #2D7DA1;
         opacity: 0.7;
         margin: 0;
     }
     .main-header {
         font-family: 'Montserrat', sans-serif;
-        font-size: 32px !important;
-        font-weight: 600 !important;
+        font-size: 28px !important;
+        font-weight: 700 !important;
         color: #002428 !important;
         text-align: center;
         letter-spacing: 0.01em;
-        padding: 1rem 0 0.25rem 0;
+        padding: 1rem 0 0.1rem 0;
     }
     .sub-header {
         font-family: 'Inter', sans-serif;
         color: #414849;
         text-align: center;
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
         font-weight: 400;
     }
-    div[data-testid="stChatMessage"] {
-        animation: fadeUp 0.4s ease-out forwards;
-        margin: 0.5rem 0;
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        background: rgba(209, 242, 235, 0.4);
+        border-radius: 9999px;
+        border: 1px solid #D1F2EB;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        color: #0D3B40;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1.5rem;
     }
-    div[data-testid="stChatMessage"][data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
-        display: flex;
-        justify-content: flex-end;
+    .status-badge .dot {
+        width: 8px;
+        height: 8px;
+        background: #D1F2EB;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    .stChatMessage {
+        animation: fadeUp 0.4s ease-out forwards;
     }
     div[data-testid="stChatMessage"] > div:first-child {
         background: rgba(255, 255, 255, 0.85) !important;
@@ -123,6 +154,7 @@ st.markdown("""
         -webkit-backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(255, 255, 255, 0.5) !important;
         border-radius: 16px !important;
+        border-top-left-radius: 4px !important;
         padding: 1rem 1.25rem !important;
         color: #0D3B40 !important;
         font-family: 'Inter', sans-serif;
@@ -130,7 +162,6 @@ st.markdown("""
         line-height: 1.6;
         box-shadow: 0 4px 15px rgba(45, 125, 161, 0.05) !important;
         max-width: 85%;
-        margin-left: 0;
     }
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child {
         background: #0D3B40 !important;
@@ -141,14 +172,10 @@ st.markdown("""
         margin-left: auto;
         max-width: 85%;
     }
-    .stChatFloatingInputContainer {
-        background: transparent !important;
-        padding-bottom: 1rem !important;
-    }
     div[data-testid="stBottom"] > div {
         background: transparent !important;
         border: none !important;
-        padding: 0 1rem 1rem 1rem !important;
+        padding: 0 1rem 1rem !important;
     }
     div[data-testid="stBottom"] > div > div {
         background: rgba(255, 255, 255, 0.7) !important;
@@ -194,12 +221,6 @@ st.markdown("""
     div[data-testid="stBottom"] button:active {
         transform: scale(0.95) !important;
     }
-    footer {display: none}
-    .spacer { height: 100px; }
-    @media (max-width: 768px) {
-        .spacer { height: 120px; }
-        .main-header { font-size: 24px !important; }
-    }
     .stSidebar .stButton button {
         border-radius: 12px !important;
         font-family: 'Inter', sans-serif !important;
@@ -223,12 +244,12 @@ st.markdown("""
     .stSpinner > div {
         border-color: #2D7DA1 !important;
     }
-    div[data-testid="stStatusWidget"] {
-        background: rgba(209, 242, 235, 0.4) !important;
-        border-radius: 9999px !important;
-        padding: 0.25rem 0.75rem !important;
-        border: 1px solid #D1F2EB !important;
+    .spacer { height: 100px; }
+    @media (max-width: 768px) {
+        .spacer { height: 120px; }
+        .main-header { font-size: 22px !important; }
     }
+    footer { display: none; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -239,8 +260,8 @@ with st.sidebar:
             <span class="material-symbols-outlined" style="color:white; font-variation-settings: 'FILL' 1;">medical_services</span>
         </div>
         <div class="sidebar-brand-text">
-            <h2>Vita AI</h2>
-            <p>Your Digital Specialist</p>
+            <h2>MediBot</h2>
+            <p>Your Health Assistant</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -277,8 +298,17 @@ with st.sidebar:
             st.session_state.quick_q = q
     st.divider()
 
-st.markdown("<div class='main-header'>VitaAI Concierge</div>", unsafe_allow_html=True)
+st.markdown("<div class='main-header'>MediBot</div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
+
+st.markdown(
+    "<div style='display:flex; justify-content:center; margin-bottom: 1rem;'>"
+    "<div class='status-badge'>"
+    "<div class='dot'></div>"
+    "<span>System Live</span>"
+    "</div></div>",
+    unsafe_allow_html=True
+)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -286,7 +316,7 @@ if "quick_q" not in st.session_state:
     st.session_state.quick_q = None
 
 for msg in st.session_state.messages:
-    avatar = "🧑" if msg["role"] == "user" else "🩺"
+    avatar = "🧑" if msg["role"] == "user" else ASSISTANT_AVATAR
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
 
@@ -310,7 +340,7 @@ if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="🧑"):
         st.markdown(prompt)
-    with st.chat_message("assistant", avatar="🩺"):
+    with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         with st.spinner("Thinking..."):
             try:
                 response = client.chat.completions.create(

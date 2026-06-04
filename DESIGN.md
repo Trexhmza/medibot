@@ -1,166 +1,157 @@
 ---
-name: Ethereal Health Intelligence
+name: Clinical Noir
 colors:
-  surface: '#f8fafb'
-  surface-dim: '#d8dadb'
-  surface-bright: '#f8fafb'
-  surface-container-lowest: '#ffffff'
-  surface-container-low: '#f2f4f5'
-  surface-container: '#eceeef'
-  surface-container-high: '#e6e8e9'
-  surface-container-highest: '#e1e3e4'
-  on-surface: '#191c1d'
-  on-surface-variant: '#414849'
-  inverse-surface: '#2e3132'
-  inverse-on-surface: '#eff1f2'
-  outline: '#717879'
-  outline-variant: '#c0c8c9'
-  surface-tint: '#3c656a'
-  primary: '#002428'
-  on-primary: '#ffffff'
-  primary-container: '#0d3b40'
-  on-primary-container: '#7ba5ab'
-  inverse-primary: '#a3ced4'
-  secondary: '#006689'
-  on-secondary: '#ffffff'
-  secondary-container: '#8dd5fd'
-  on-secondary-container: '#005d7d'
-  tertiary: '#042421'
-  on-tertiary: '#ffffff'
-  tertiary-container: '#1c3a36'
-  on-tertiary-container: '#85a49e'
-  error: '#ba1a1a'
-  on-error: '#ffffff'
-  error-container: '#ffdad6'
-  on-error-container: '#93000a'
-  primary-fixed: '#bfeaf0'
-  primary-fixed-dim: '#a3ced4'
-  on-primary-fixed: '#001f23'
-  on-primary-fixed-variant: '#234d52'
-  secondary-fixed: '#c2e8ff'
-  secondary-fixed-dim: '#87cff7'
-  on-secondary-fixed: '#001e2c'
-  on-secondary-fixed-variant: '#004d68'
-  tertiary-fixed: '#c8e9e2'
-  tertiary-fixed-dim: '#adcdc7'
-  on-tertiary-fixed: '#01201c'
-  on-tertiary-fixed-variant: '#2f4c47'
-  background: '#f8fafb'
-  on-background: '#191c1d'
-  surface-variant: '#e1e3e4'
-  deep-teal: '#0D3B40'
-  medical-blue: '#2D7DA1'
-  soft-mint: '#D1F2EB'
-  glass-white: rgba(255, 255, 255, 0.7)
-  error-alert: '#FF4B4B'
+  surface: '#131313'
+  surface-dim: '#131313'
+  surface-bright: '#3a3939'
+  surface-container-lowest: '#0e0e0e'
+  surface-container-low: '#1c1b1b'
+  surface-container: '#201f1f'
+  surface-container-high: '#2a2a2a'
+  surface-container-highest: '#353534'
+  on-surface: '#e5e2e1'
+  on-surface-variant: '#e4bebc'
+  inverse-surface: '#e5e2e1'
+  inverse-on-surface: '#313030'
+  outline: '#ab8987'
+  outline-variant: '#5b403f'
+  surface-tint: '#ffb3b1'
+  primary: '#ffb3b1'
+  on-primary: '#680011'
+  primary-container: '#ff535b'
+  on-primary-container: '#5b000e'
+  inverse-primary: '#bb152c'
+  secondary: '#ffb4a8'
+  on-secondary: '#690000'
+  secondary-container: '#920703'
+  on-secondary-container: '#ff9a8a'
+  tertiary: '#c8c6c5'
+  on-tertiary: '#313030'
+  tertiary-container: '#929090'
+  on-tertiary-container: '#2a2a2a'
+  error: '#ffb4ab'
+  on-error: '#690005'
+  error-container: '#93000a'
+  on-error-container: '#ffdad6'
+  primary-fixed: '#ffdad8'
+  primary-fixed-dim: '#ffb3b1'
+  on-primary-fixed: '#410007'
+  on-primary-fixed-variant: '#92001c'
+  secondary-fixed: '#ffdad4'
+  secondary-fixed-dim: '#ffb4a8'
+  on-secondary-fixed: '#410000'
+  on-secondary-fixed-variant: '#920703'
+  tertiary-fixed: '#e5e2e1'
+  tertiary-fixed-dim: '#c8c6c5'
+  on-tertiary-fixed: '#1c1b1b'
+  on-tertiary-fixed-variant: '#474746'
+  background: '#131313'
+  on-background: '#e5e2e1'
+  surface-variant: '#353534'
 typography:
   display-lg:
-    fontFamily: Montserrat
+    fontFamily: Hanken Grotesk
     fontSize: 48px
     fontWeight: '700'
-    lineHeight: '1.1'
+    lineHeight: 56px
     letterSpacing: -0.02em
   headline-lg:
-    fontFamily: Montserrat
+    fontFamily: Hanken Grotesk
     fontSize: 32px
     fontWeight: '600'
-    lineHeight: '1.2'
-    letterSpacing: 0.01em
+    lineHeight: 40px
   headline-lg-mobile:
-    fontFamily: Montserrat
+    fontFamily: Hanken Grotesk
     fontSize: 24px
     fontWeight: '600'
-    lineHeight: '1.2'
-  headline-md:
-    fontFamily: Montserrat
-    fontSize: 24px
-    fontWeight: '500'
-    lineHeight: '1.3'
-    letterSpacing: 0.02em
-  body-lg:
-    fontFamily: Inter
+    lineHeight: 32px
+  title-md:
+    fontFamily: Hanken Grotesk
     fontSize: 18px
-    fontWeight: '400'
-    lineHeight: '1.6'
-    letterSpacing: 0.01em
-  body-md:
-    fontFamily: Inter
+    fontWeight: '500'
+    lineHeight: 24px
+  body-lg:
+    fontFamily: Hanken Grotesk
     fontSize: 16px
     fontWeight: '400'
-    lineHeight: '1.6'
-  label-caps:
-    fontFamily: Inter
-    fontSize: 12px
-    fontWeight: '700'
-    lineHeight: '1.0'
-    letterSpacing: 0.1em
-  chat-bubble:
-    fontFamily: Inter
-    fontSize: 15px
+    lineHeight: 26px
+  body-sm:
+    fontFamily: Hanken Grotesk
+    fontSize: 14px
     fontWeight: '400'
-    lineHeight: '1.5'
+    lineHeight: 20px
+  label-md:
+    fontFamily: JetBrains Mono
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: 16px
+    letterSpacing: 0.05em
 rounded:
-  sm: 0.25rem
-  DEFAULT: 0.5rem
-  md: 0.75rem
-  lg: 1rem
-  xl: 1.5rem
+  sm: 0.125rem
+  DEFAULT: 0.25rem
+  md: 0.375rem
+  lg: 0.5rem
+  xl: 0.75rem
   full: 9999px
 spacing:
-  base: 8px
-  container-max: 1200px
-  gutter: 24px
-  margin-mobile: 20px
-  margin-desktop: 64px
+  unit: 4px
+  gutter: 16px
+  margin-mobile: 16px
+  margin-desktop: 48px
+  container-max-width: 1200px
 ---
 
 ## Brand & Style
+The design system is engineered for high-stakes healthcare environments where clarity, speed, and focus are paramount. It adopts a **Corporate Modern** style with a dark-mode-first philosophy to reduce eye strain for medical professionals and patients in low-light settings. 
 
-The design system is engineered to evoke the "million-dollar tech startup" aesthetic—a fusion of clinical precision and high-vibe wellness. It targets a health-conscious, tech-savvy demographic that demands both expertise and an elevated user experience.
-
-The visual style is **Glassmorphism**, characterized by translucent surfaces, multi-layered depth, and a sense of weightlessness. The design narrative centers on "Calm Authority," utilizing vast negative space and refined transparency to make complex medical data feel approachable and futuristic. The interface should feel less like a database and more like a premium concierge service.
+The aesthetic is characterized by deep atmospheric blacks and rich medicinal reds, creating a "Mission Control" for health. It communicates serious reliability through a structured, low-contrast interface that prioritizes data legibility and trust. The emotional response is one of calm authority, professionalism, and modern precision.
 
 ## Colors
+The palette is rooted in a "Deep Blood" red spectrum. The **Primary Color** (#E63946) is a vibrant, clinical red used sparingly for key actions and branding. The **Secondary Color** (#8B0000) provides a somber, grounded accent for borders and container backgrounds.
 
-The palette balances the grounded reliability of **Deep Teal** and **Medical Blue** with the refreshing, airy qualities of **Soft Mint**. 
-
-- **Primary & Secondary:** Use Deep Teal for core structural elements and high-hierarchy typography. Medical Blue serves as the primary action color for buttons and interactive states.
-- **Surface Strategy:** The background is a clean, near-white neutral. Use Soft Mint as a subtle wash for secondary containers or success states.
-- **High-Vibe Accents:** Implement linear gradients transitioning from Medical Blue to Soft Mint (45-degree angle) for primary progress bars, active chat bubbles, and "high-vibe" feature highlights.
+The **Neutral** tones follow a charcoal-to-black scale. Backgrounds are nearly pure black to ensure maximum contrast for text and medical data. Borders use a subtle red-tinted dark gray to maintain the brand's warmth within a cold, dark interface.
 
 ## Typography
+This design system utilizes **Hanken Grotesk** for all primary communication. It is a clean, sharp, and highly legible grotesque that feels contemporary yet clinical. For technical data, timestamps, and healthcare-specific identifiers, **JetBrains Mono** is used to provide a "lab-result" precision and distinguish metadata from conversational text.
 
-Typography focuses on "Generous Legibility." **Montserrat** provides a geometric, modern confidence for headings, while **Inter** ensures data-heavy medical information remains readable and neutral.
-
-Increased letter spacing (tracking) is applied to uppercase labels and headlines to enhance the premium feel. Avoid heavy weights for body text; rely on Medium (500) for emphasis to maintain a light, sophisticated aesthetic. Line heights are intentionally tall to create a relaxed reading rhythm.
+Headlines should be kept concise. Body text utilizes a generous line height (1.6x) to ensure that dense medical information remains digestible.
 
 ## Layout & Spacing
+The layout follows a **Fixed Grid** model for desktop, centered within the viewport to maintain focus. A 12-column system is used with 16px gutters. For the AI Chat interface, a specialized 3-column layout is recommended:
+- **Left/Main (8 columns):** The primary chat stream and input.
+- **Right Sidebar (4 columns):** Quick suggestions, medical profile, and lab result previews.
 
-The layout follows a **Fluid Grid** model with significant breathing room. 
-- **Desktop:** 12-column grid with wide 64px external margins to center the focus.
-- **Mobile:** 4-column grid with 20px margins.
-- **Rhythm:** Use an 8px base unit. Component internal padding should be generous (e.g., 24px or 32px for cards) to prevent the "cramped" feel often found in traditional medical software. 
-- **Chat Interface:** Center-aligned conversational flow with max-width constrained to 800px to ensure optimal line length for readability.
+On mobile, the layout collapses into a single-column fluid stack, where the sidebar becomes a bottom-sheet or a secondary tab. All spacing is derived from a 4px base unit to ensure surgical precision in alignment.
 
 ## Elevation & Depth
-
-Depth is achieved through **Glassmorphism** rather than traditional opaque stacking.
-
-- **The Glass Layer:** Foreground containers use `rgba(255, 255, 255, 0.7)` with a `backdrop-filter: blur(20px)`. 
-- **Shadows:** Use "Ambient Shadows"—ultra-diffused (40px-60px blur), low opacity (5-8%), tinted with a touch of Medical Blue (`#2D7DA1`) to prevent gray, muddy looks.
-- **Glows:** High-importance elements (like the active Bot Avatar or "Ask" button) feature a soft outer glow in Soft Mint to simulate a "high-vibe" energy source.
+Depth is achieved through **Tonal Layers** rather than heavy shadows. In a dark environment, depth is conveyed by making "higher" elements slightly lighter or more saturated.
+- **Level 0 (Base):** Pure black #050505.
+- **Level 1 (Containers):** Deep charcoal #121212 with a 1px border of #2A1212.
+- **Level 2 (Chat Bubbles/Modals):** Dark gray #1A1A1A with a subtle inner glow on the top edge.
+- **Overlays:** Semi-transparent backdrops using #000000 at 80% opacity with a 10px background blur.
 
 ## Shapes
-
-The shape language is "Approachable Geometric." 
-
-Standard components use a **0.5rem (8px)** base radius. However, interactive elements like Chat Bubbles and Primary Action Buttons utilize a **Pill-shape (max-roundedness)** to soften the user's emotional response and lean into the futuristic startup aesthetic. Subtle 1px inner borders (semi-transparent white) should be applied to glass elements to define edges against vibrant backgrounds.
+The shape language is **Soft (Level 1)**. It uses a 0.25rem (4px) base radius. This creates a disciplined, professional look that avoids the "playfulness" of highly rounded corners while remaining more approachable than sharp 90-degree angles. Chat bubbles and primary buttons use `rounded-lg` (8px) to provide a distinct touch target and visual comfort.
 
 ## Components
+### Chat Bubbles
+- **Assistant:** Background #1A1A1A, border left 4px solid #E63946. Text is white.
+- **User:** Background #2A1212, no border. Text is #E0E0E0.
+- **Avatar:** 32px circular frames with high-resolution clinical portraits or medical icons.
 
-- **Chat Bubbles:** User bubbles are solid Deep Teal with white text. Bot bubbles use the Glassmorphism style (blurred white background) with Medical Blue text.
-- **Buttons:** Primary buttons use a gradient (Medical Blue to Soft Mint) with a subtle floating animation on hover. No hard borders; use soft shadows for definition.
-- **Input Fields:** Floating labels with a background-blur effect. The focus state should illuminate the border with a Soft Mint glow.
-- **Cards:** Used for medical insights or "Health Scores." These should feature a 1px "shine" border (linear gradient: white to transparent) to emphasize the glass effect.
-- **The "Pulse" Indicator:** A small, animated Soft Mint circle that pulses slowly when the AI is "thinking," creating a sense of life within the interface.
-- **Chips:** Highly rounded, using low-opacity versions of the brand colors for categorization (e.g., "Symptom," "History").
+### Quick Suggestions
+- **Style:** Ghost buttons with a #2A1212 border and #E63946 icon.
+- **Interaction:** On hover, the background fills with a faint red tint (5% opacity) and the border brightens.
+
+### Input Fields
+- **Style:** Underlined or fully enclosed with #2A1212 border. 
+- **Focus:** The border transitions to #E63946 with a soft red outer glow.
+- **Typography:** Uses `body-sm`.
+
+### Healthcare Icons
+- **Style:** 24px stroke-based icons with 1.5px weight. 
+- **Coloring:** Icons should use the Primary Red when active or indicating health-critical data, and Mid-Gray for neutral actions.
+
+### Progress & Status
+- **Critical Status:** Pulse animation using Primary Red.
+- **Stable Status:** Solid Deep Gray.
