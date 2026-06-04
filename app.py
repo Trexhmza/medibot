@@ -44,9 +44,12 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.15);
     }
     .stChatInput {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 25px;
+        background: transparent !important;
+        border: none !important;
+    }
+    div[data-testid="stBottom"] > div {
+        background: transparent !important;
+        border: none !important;
     }
     .sidebar-content {
         padding: 1rem 0;
