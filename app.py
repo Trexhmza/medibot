@@ -24,180 +24,260 @@ for ext in ["png", "jpg", "jpeg", "webp"]:
         ASSISTANT_AVATAR = str(p)
         break
 if not ASSISTANT_AVATAR:
-    ASSISTANT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23B71C1C'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='50' fill='white'%3E🩺%3C/text%3E%3C/svg%3E"
+    ASSISTANT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23E63946'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='50' fill='white'%3E🩺%3C/text%3E%3C/svg%3E"
 
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <style>
-    @keyframes pulse {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 154, 154, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 154, 154, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 154, 154, 0); }
-    }
     @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(8px); }
         to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes pulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.5); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(230, 57, 70, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
+    }
 
-    .stApp { background: #f8fafb; }
-    .stApp::before {
-        content: '';
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background:
-            radial-gradient(ellipse at 20% 50%, rgba(255, 205, 210, 0.3) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(183, 28, 28, 0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 80%, rgba(198, 40, 40, 0.04) 0%, transparent 50%);
-        pointer-events: none; z-index: 0;
+    * { box-sizing: border-box; }
+
+    .stApp {
+        background: #050505 !important;
     }
 
     header[data-testid="stHeader"] {
-        background: rgba(255,255,255,0.3) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+        background: #0a0a0a !important;
+        border-bottom: 1px solid #1a0a0a !important;
     }
 
     section[data-testid="stSidebar"] {
-        background: rgba(248,250,251,0.5) !important;
-        backdrop-filter: blur(24px) !important;
-        -webkit-backdrop-filter: blur(24px) !important;
-        border-right: 1px solid rgba(255,255,255,0.3) !important;
-        width: 320px !important;
+        background: #0d0d0d !important;
+        border-right: 1px solid #1a0a0a !important;
+        min-width: 280px !important;
+        max-width: 320px !important;
     }
     section[data-testid="stSidebar"] > div { background: transparent !important; }
-    div[data-testid="stSidebarUserContent"] { padding-top: 0 !important; }
+    div[data-testid="stSidebarUserContent"] { padding: 1rem 1rem 0 1rem !important; }
 
     .sidebar-brand {
         display: flex; align-items: center; gap: 12px;
-        margin-bottom: 1.5rem; padding: 0.5rem;
+        margin-bottom: 1.5rem; padding: 0.25rem;
     }
     .sidebar-brand-icon {
-        width: 48px; height: 48px; border-radius: 12px;
-        background: linear-gradient(135deg, #C62828, #FFCDD2);
+        width: 44px; height: 44px; border-radius: 12px;
+        background: linear-gradient(135deg, #E63946, #8B0000);
         display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 8px 20px rgba(198,40,40,0.2);
+        flex-shrink: 0;
     }
     .sidebar-brand-text h2 {
-        font-family: 'Montserrat', sans-serif; font-size: 22px;
-        font-weight: 600; color: #B71C1C; margin: 0; line-height: 1.2;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 20px; font-weight: 700;
+        color: #e5e2e1; margin: 0; line-height: 1.2;
     }
     .sidebar-brand-text p {
-        font-family: 'Inter', sans-serif; font-size: 13px;
-        color: #C62828; opacity: 0.7; margin: 0;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px; color: #ab8987; margin: 0; letter-spacing: 0.05em;
     }
+
+    .nav-btn {
+        width: 100% !important;
+        background: transparent !important;
+        border: 1px solid #2a1212 !important;
+        color: #e5e2e1 !important;
+        font-family: 'Hanken Grotesk', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
+        text-align: left !important;
+        transition: all 0.15s !important;
+        margin: 3px 0 !important;
+    }
+    .nav-btn:hover {
+        background: rgba(230, 57, 70, 0.05) !important;
+        border-color: #E63946 !important;
+    }
+
     .upgrade-btn {
-        width: 100%; padding: 16px;
-        background: linear-gradient(135deg, #C62828, #B71C1C);
-        color: white; font-family: 'Inter', sans-serif;
+        width: 100%; padding: 14px;
+        background: linear-gradient(135deg, #E63946, #8B0000);
+        color: white; font-family: 'Hanken Grotesk', sans-serif;
         font-weight: 700; font-size: 14px;
-        border: none; border-radius: 12px;
+        border: none; border-radius: 8px;
         cursor: pointer; transition: opacity 0.2s;
-        box-shadow: 0 8px 25px rgba(198,40,40,0.3);
         margin: 1rem 0;
     }
     .upgrade-btn:hover { opacity: 0.9; }
 
-    .topbar-hidden { display: none !important; }
+    .main-header {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 28px; font-weight: 700;
+        color: #e5e2e1; text-align: center;
+        padding: 1rem 0 0.1rem 0;
+        letter-spacing: -0.02em;
+    }
+    .main-header span {
+        color: #E63946;
+    }
+    .sub-header {
+        font-family: 'Hanken Grotesk', sans-serif;
+        color: #ab8987; text-align: center;
+        font-size: 0.85rem; margin-bottom: 1.5rem;
+        font-weight: 400;
+    }
 
-    .stChatMessage { animation: fadeUp 0.4s ease-out forwards; }
+    .stChatMessage {
+        animation: fadeUp 0.3s ease-out forwards;
+        margin: 0.5rem 0;
+    }
 
-    div[data-testid="stChatMessage"] > div:first-child {
-        background: rgba(255,255,255,0.85) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(255,255,255,0.5) !important;
-        border-radius: 16px 16px 16px 4px !important;
+    /* Assistant (bot) chat bubble */
+    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) > div:first-child {
+        background: #1A1A1A !important;
+        border-left: 4px solid #E63946 !important;
+        border-radius: 0 8px 8px 8px !important;
         padding: 1rem 1.25rem !important;
-        color: #4a1a1a !important;
-        font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6;
-        box-shadow: 0 4px 15px rgba(198,40,40,0.05) !important;
-        max-width: 85%; position: relative; overflow: hidden;
-    }
-    div[data-testid="stChatMessage"] > div:first-child::after {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-        border: 1px solid transparent;
-        background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.1) 100%) border-box;
-        -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: destination-out;
-        mask-composite: exclude;
-        pointer-events: none;
+        color: #e5e2e1 !important;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 15px; line-height: 1.6;
+        max-width: 82%;
+        box-shadow: none !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-bottom: none !important;
     }
 
+    /* User chat bubble */
+    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
+        display: flex;
+        justify-content: flex-end;
+    }
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child {
-        background: linear-gradient(135deg, #C62828, #B71C1C) !important;
+        background: #2A1212 !important;
         border: none !important;
-        border-radius: 16px 16px 4px 16px !important;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(183,28,28,0.2) !important;
-        margin-left: auto; max-width: 85%;
-    }
-    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child::after {
-        display: none !important;
+        border-radius: 8px 8px 0 8px !important;
+        padding: 1rem 1.25rem !important;
+        color: #e0e0e0 !important;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 15px; line-height: 1.6;
+        max-width: 82%;
+        margin-left: auto;
+        box-shadow: none !important;
     }
 
-    .stChatFloatingInputContainer { background: transparent !important; padding-bottom: 0 !important; }
+    /* Chat input */
     div[data-testid="stBottom"] > div {
-        background: transparent !important; border: none !important;
-        padding: 0 1rem 1.5rem !important;
+        background: #0a0a0a !important;
+        border-top: 1px solid #1a0a0a !important;
+        padding: 0.75rem 1rem 1rem !important;
     }
     div[data-testid="stBottom"] > div > div {
-        background: rgba(255,255,255,0.7) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        border: 1px solid rgba(255,255,255,0.3) !important;
-        border-radius: 9999px !important;
-        box-shadow: 0 20px 50px rgba(198,40,40,0.08) !important;
-        padding: 4px 4px 4px 20px !important;
-        max-width: 800px !important; margin: 0 auto !important;
+        background: #121212 !important;
+        border: 1px solid #2a1212 !important;
+        border-radius: 8px !important;
+        max-width: 800px !important;
+        margin: 0 auto !important;
+        padding: 2px !important;
+        transition: border-color 0.2s !important;
+    }
+    div[data-testid="stBottom"] > div > div:focus-within {
+        border-color: #E63946 !important;
+        box-shadow: 0 0 12px rgba(230, 57, 70, 0.15) !important;
     }
     div[data-testid="stBottom"] textarea {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 16px !important; color: #4a1a1a !important;
-        background: transparent !important; border: none !important;
-        outline: none !important; box-shadow: none !important;
-        padding: 8px 0 !important;
+        font-family: 'Hanken Grotesk', sans-serif !important;
+        font-size: 15px !important;
+        color: #e5e2e1 !important;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        padding: 8px 12px !important;
     }
     div[data-testid="stBottom"] textarea::placeholder {
-        color: rgba(198,40,40,0.35) !important;
+        color: #5b403f !important;
     }
     div[data-testid="stBottom"] button {
-        background: linear-gradient(135deg, #C62828, #B71C1C) !important;
-        border-radius: 9999px !important; border: none !important;
-        box-shadow: 0 0 20px rgba(239,154,154,0.4) !important;
-        transition: all 0.2s !important;
-        min-width: 48px !important; min-height: 48px !important;
+        background: #E63946 !important;
+        border-radius: 6px !important;
+        border: none !important;
+        transition: all 0.15s !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
     }
-    div[data-testid="stBottom"] button:hover { transform: scale(1.05) !important; }
-    div[data-testid="stBottom"] button:active { transform: scale(0.95) !important; }
+    div[data-testid="stBottom"] button:hover { background: #ff525b !important; }
 
+    /* Sidebar buttons */
     .stSidebar .stButton button {
-        border-radius: 12px !important;
-        font-family: 'Inter', sans-serif !important;
-        font-weight: 500 !important; transition: all 0.2s !important;
-        border: 1px solid rgba(255,255,255,0.3) !important;
-        background: rgba(255,255,255,0.5) !important;
-        color: #B71C1C !important;
+        width: 100% !important;
+        background: transparent !important;
+        border: 1px solid #2a1212 !important;
+        color: #e5e2e1 !important;
+        font-family: 'Hanken Grotesk', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        transition: all 0.15s !important;
     }
     .stSidebar .stButton button:hover {
-        background: rgba(255,205,210,0.3) !important;
-        border-color: rgba(198,40,40,0.2) !important;
+        background: rgba(230, 57, 70, 0.05) !important;
+        border-color: #E63946 !important;
     }
+
     .stSidebar .stInfo {
-        font-family: 'Inter', sans-serif !important; font-size: 14px !important;
-        background: rgba(255,205,210,0.2) !important;
-        border: 1px solid rgba(255,205,210,0.3) !important;
-        color: #B71C1C !important;
+        font-family: 'Hanken Grotesk', sans-serif !important;
+        font-size: 13px !important;
+        background: #1a0a0a !important;
+        border: 1px solid #2a1212 !important;
+        color: #e4bebc !important;
     }
-    .stSpinner > div { border-color: #C62828 !important; }
+
+    .stSpinner > div { border-color: #E63946 !important; border-top-color: transparent !important; }
+
+    .stSidebar hr {
+        border-color: #1a0a0a !important;
+        margin: 1rem 0 !important;
+    }
+
+    .stSidebar .sidebar-section-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        color: #ab8987;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 1rem 0 0.5rem 0;
+    }
+
     .spacer { height: 120px; }
+
     @media (max-width: 768px) {
+        section[data-testid="stSidebar"] {
+            min-width: 100% !important;
+            max-width: 100% !important;
+        }
         .spacer { height: 140px; }
+        .main-header { font-size: 22px; }
+        div[data-testid="stChatMessage"] > div:first-child {
+            max-width: 90% !important;
+        }
     }
+
     footer { display: none; }
     #MainMenu { visibility: hidden; }
+    .stDeployButton { display: none !important; }
+
+    .quick-q-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        color: #ab8987;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 1rem 0 0.5rem 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -205,11 +285,11 @@ with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
         <div class="sidebar-brand-icon">
-            <span class="material-symbols-outlined" style="color:white; font-variation-settings:'FILL' 1;">smart_toy</span>
+            <span class="material-symbols-outlined" style="color:white; font-size:24px;">smart_toy</span>
         </div>
         <div class="sidebar-brand-text">
             <h2>MediBot</h2>
-            <p>Your Health Assistant</p>
+            <p>Clinical Assistant</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -219,8 +299,8 @@ with st.sidebar:
         st.rerun()
     if st.button("📋 Health History", use_container_width=True):
         st.info("Health history feature coming soon.")
-    if st.button("📊 Medical Insights", use_container_width=True):
-        st.info("Medical insights feature coming soon.")
+    if st.button("📊 Insights", use_container_width=True):
+        st.info("Insights feature coming soon.")
     if st.button("⚙️ Settings", use_container_width=True):
         st.info("Settings feature coming soon.")
 
@@ -229,8 +309,7 @@ with st.sidebar:
     if st.button("❓ Help Center", use_container_width=True):
         st.info("Help center coming soon.")
 
-    st.divider()
-    st.markdown("**📋 Quick Questions**")
+    st.markdown("<div class='quick-q-label'>Quick Questions</div>", unsafe_allow_html=True)
     if "sample_qs" not in st.session_state:
         all_qs = [
             "What are symptoms of dehydration?",
@@ -250,26 +329,9 @@ with st.sidebar:
     for q in st.session_state.sample_qs:
         if st.button(q, use_container_width=True):
             st.session_state.quick_q = q
-    st.divider()
 
-# st.markdown("""
-# <div class="custom-topbar">
-#     <div class="topbar-left">
-#         <span class="material-symbols-outlined" style="color:#2D7DA1; font-size:28px;">smart_toy</span>
-#         <span class="topbar-title">MediBot</span>
-#     </div>
-#     <div class="topbar-right">
-#         <div class="topbar-status">
-#             <div class="dot"></div>
-#             <span>System Live</span>
-#         </div>
-#         <div class="topbar-icon">
-#             <span class="material-symbols-outlined" style="color:#2D7DA1;">notifications</span>
-#         </div>
-#         <div class="topbar-avatar">👤</div>
-#     </div>
-# </div>
-# """, unsafe_allow_html=True)
+st.markdown("<div class='main-header'>MediBot</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
