@@ -46,10 +46,24 @@ st.markdown("""
     .stChatInput {
         background: transparent !important;
         border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
     }
     div[data-testid="stBottom"] > div {
         background: transparent !important;
         border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    .stChatInput:focus, .stChatInput:focus-within {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stBottom"] textarea {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
     }
     .sidebar-content {
         padding: 1rem 0;
