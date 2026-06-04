@@ -129,7 +129,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
 
-sys_prompt = "You are a medical info assistant. Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Do not diagnose or prescribe."
+sys_prompt = "You are a medical info assistant. Only answer health and medical-related questions. If a question is not about health, medicine, or the human body, politely refuse to answer and say you can only help with medical topics. Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Do not diagnose or prescribe."
 
 prompt = st.chat_input("Ask your medical question...")
 if st.session_state.quick_q:
