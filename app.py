@@ -19,7 +19,24 @@ client = Groq(api_key=api_key)
 st.set_page_config(page_title="Heal Buddy", page_icon="🩺", layout="wide")
 
 USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
-ASSISTANT_AVATAR = "Gemini_Generated_Image_8pdtri8pdtri8pdt.png"
+HEADER_LOGO = "Gemini_Generated_Image_8pdtri8pdtri8pdt.png"
+
+DOCTORS = {
+    "female": {
+        "name": "Dr. Sarah",
+        "avatar": "Gemini_Generated_Image_afde05afde05afde.png",
+        "label": "Caring & Warm",
+        "desc": "A compassionate female doctor who listens with empathy and nurtures your concerns.",
+        "prompt": "You are Dr. Sarah, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
+    },
+    "male": {
+        "name": "Dr. James",
+        "avatar": "Gemini_Generated_Image_q64wzmq64wzmq64w.png",
+        "label": "Cold & Professional",
+        "desc": "A no-nonsense doctor who gives precise, clinical answers with a detached professional tone.",
+        "prompt": "You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth — just precise medical information. If the user asks something off-topic, state flatly: 'That is outside my scope. Please ask a health-related question.' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
+    }
+}
 
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -76,7 +93,9 @@ st.markdown("""
         border-bottom: 1px solid rgba(230, 57, 70, 0.1) !important;
     }
 
-    section[data-testid="stSidebar"] { display: none !important; }
+    section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
+    section[data-testid="stSidebar"] { background: rgba(10, 10, 10, 0.95) !important; border-right: 1px solid rgba(230, 57, 70, 0.1) !important; }
+    section[data-testid="stSidebar"] .sidebar-content { padding: 1rem !important; }
     .stApp > div:first-child { margin-left: 0 !important; }
 
     .main-header {
@@ -259,58 +278,94 @@ st.markdown("""
         }
     }
 
+    /* Sidebar styles */
+    .sidebar-title {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 18px; font-weight: 700;
+        color: #e8e0e0;
+        text-align: center;
+        padding: 1rem 0 0.5rem;
+        border-bottom: 1px solid rgba(230, 57, 70, 0.15);
+        margin-bottom: 1rem;
+    }
+    .doctor-card {
+        background: rgba(18, 18, 18, 0.8);
+        border: 1px solid rgba(230, 57, 70, 0.12);
+        border-radius: 12px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .doctor-card:hover {
+        border-color: rgba(230, 57, 70, 0.4);
+        background: rgba(26, 26, 26, 0.9);
+    }
+    .doctor-card.active {
+        border-color: #E63946;
+        box-shadow: 0 0 12px rgba(230, 57, 70, 0.2);
+    }
+    .doctor-card img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(230, 57, 70, 0.2);
+    }
+    .doctor-card.active img {
+        border-color: #E63946;
+    }
+    .doctor-card .info { flex: 1; min-width: 0; }
+    .doctor-card .info .name {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 14px; font-weight: 600;
+        color: #e8e0e0;
+    }
+    .doctor-card .info .label {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 11px;
+        color: rgba(230, 57, 70, 0.7);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .doctor-card .info .desc {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 12px;
+        color: rgba(171, 137, 135, 0.6);
+        line-height: 1.4;
+        margin-top: 2px;
+    }
+    .sidebar-btn {
+        font-family: 'Hanken Grotesk', sans-serif !important;
+        background: linear-gradient(135deg, rgba(230, 57, 70, 0.15), rgba(139, 0, 0, 0.15)) !important;
+        border: 1px solid rgba(230, 57, 70, 0.2) !important;
+        border-radius: 8px !important;
+        color: #e8e0e0 !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        padding: 0.5rem 1rem !important;
+        width: 100%;
+        transition: all 0.2s !important;
+        cursor: pointer;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    .sidebar-btn:hover {
+        background: linear-gradient(135deg, rgba(230, 57, 70, 0.25), rgba(139, 0, 0, 0.25)) !important;
+        border-color: rgba(230, 57, 70, 0.4) !important;
+    }
+
     footer { display: none; }
     #MainMenu { visibility: hidden; }
     .stDeployButton { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# with st.sidebar:
-#     st.markdown("""
-#     <div class="sidebar-brand">
-#         <div class="sidebar-brand-icon">
-#             <span class="material-symbols-outlined" style="color:white; font-size:24px;">smart_toy</span>
-#         </div>
-#         <div class="sidebar-brand-text">
-#             <h2>Heal Buddy</h2>
-#             <p>Clinical Assistant</p>
-#         </div>
-#     </div>
-#     """, unsafe_allow_html=True)
-#     if st.button("➕ New Consultation", use_container_width=True):
-#         st.session_state.messages = []
-#         st.rerun()
-#     if st.button("📋 Health History", use_container_width=True):
-#         st.info("Health history feature coming soon.")
-#     if st.button("📊 Insights", use_container_width=True):
-#         st.info("Insights feature coming soon.")
-#     if st.button("⚙️ Settings", use_container_width=True):
-#         st.info("Settings feature coming soon.")
-#     st.markdown("<button class='upgrade-btn'>Upgrade to Pro</button>", unsafe_allow_html=True)
-#     if st.button("❓ Help Center", use_container_width=True):
-#         st.info("Help center coming soon.")
-#     st.markdown("<div class='quick-q-label'>Quick Questions</div>", unsafe_allow_html=True)
-#     if "sample_qs" not in st.session_state:
-#         all_qs = [
-#             "What are symptoms of dehydration?",
-#             "How to lower blood pressure naturally?",
-#             "What vitamins boost immunity?",
-#             "First aid for minor burns?",
-#             "Signs of a vitamin D deficiency?",
-#             "How to improve sleep quality?",
-#             "Foods high in iron?",
-#             "What helps with headaches?",
-#             "Benefits of drinking water?",
-#             "How to reduce stress naturally?",
-#             "Symptoms of food poisoning?",
-#             "What is normal blood sugar range?",
-#         ]
-#         st.session_state.sample_qs = random.sample(all_qs, 4)
-#     for q in st.session_state.sample_qs:
-#         if st.button(q, use_container_width=True):
-#             st.session_state.quick_q = q
-
-with open(ASSISTANT_AVATAR, "rb") as f:
+with open(HEADER_LOGO, "rb") as f:
     logo_b64 = base64.b64encode(f.read()).decode()
 st.markdown(f"<div class='main-header'><img src='data:image/png;base64,{logo_b64}' /></div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
@@ -319,9 +374,46 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 if "quick_q" not in st.session_state:
     st.session_state.quick_q = None
+if "assistant" not in st.session_state:
+    st.session_state.assistant = "female"
+
+current_doc = DOCTORS[st.session_state.assistant]
+
+with st.sidebar:
+    st.markdown("<div class='sidebar-title'>Choose Your Doctor</div>", unsafe_allow_html=True)
+
+    for key, doc in DOCTORS.items():
+        active = "active" if key == st.session_state.assistant else ""
+        with open(doc["avatar"], "rb") as f:
+            avatar_b64 = base64.b64encode(f.read()).decode()
+        card = f"""
+        <div class='doctor-card {active}'>
+            <img src='data:image/png;base64,{avatar_b64}' />
+            <div class='info'>
+                <div class='name'>{doc["name"]}</div>
+                <div class='label'>{doc["label"]}</div>
+                <div class='desc'>{doc["desc"]}</div>
+            </div>
+        </div>
+        """
+        st.markdown(card, unsafe_allow_html=True)
+        if st.button(f"Select {doc['name']}", key=f"sel_{key}", use_container_width=True):
+            st.session_state.assistant = key
+            st.rerun()
+
+    st.divider()
+
+    if st.button("🗑️ Clear Chat", key="clear_chat", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
+
+    if st.button("🔄 Reset All", key="reset_all", use_container_width=True):
+        st.session_state.messages = []
+        st.session_state.assistant = "female"
+        st.rerun()
 
 for msg in st.session_state.messages:
-    avatar = USER_AVATAR if msg["role"] == "user" else ASSISTANT_AVATAR
+    avatar = USER_AVATAR if msg["role"] == "user" else current_doc["avatar"]
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
 
@@ -334,8 +426,6 @@ html_component("""
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
-sys_prompt = "You are a warm, caring nurse assistant. Speak with kindness and empathy like a real nurse would. If the user asks something off-topic (not health-related), gently steer them back — don't refuse bluntly. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
-
 prompt = st.chat_input("Describe your symptoms or ask a health question...")
 if st.session_state.quick_q:
     prompt = st.session_state.quick_q
@@ -345,13 +435,13 @@ if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
-    with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
+    with st.chat_message("assistant", avatar=current_doc["avatar"]):
         with st.spinner("Thinking..."):
             try:
                 response = client.chat.completions.create(
                     model="llama-3.3-70b-versatile",
                     messages=[
-                        {"role": "system", "content": sys_prompt},
+                        {"role": "system", "content": current_doc["prompt"]},
                         {"role": "user", "content": prompt},
                     ]
                 )
