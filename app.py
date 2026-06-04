@@ -2,7 +2,6 @@
 from groq import Groq
 import os
 import random
-from pathlib import Path
 from dotenv import load_dotenv
 import base64
 from streamlit.components.v1 import html as html_component
@@ -19,7 +18,6 @@ client = Groq(api_key=api_key)
 st.set_page_config(page_title="Heal Buddy", page_icon="🩺", layout="wide")
 
 USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
-HEADER_LOGO = "Gemini_Generated_Image_8pdtri8pdtri8pdt.png"
 
 DOCTORS = {
     "female": {
@@ -39,7 +37,7 @@ DOCTORS = {
 }
 
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <style>
     @keyframes bgShift {
@@ -100,28 +98,50 @@ st.markdown("""
 
     .main-header {
         text-align: center;
-        padding: 0.5rem 0 0 0;
+        padding: 0.6rem 0 0 0;
         position: relative;
         z-index: 1;
     }
-    .main-header img {
-        max-height: 100px;
-        width: auto;
-        filter: drop-shadow(0 0 30px rgba(230, 57, 70, 0.4));
-        animation: logoGlow 3s ease-in-out infinite;
+    .main-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        background: linear-gradient(135deg, #ff6b6b, #E63946, #ff8a8a, #E63946);
+        background-size: 300% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmer 4s linear infinite;
+        margin: 0;
+        line-height: 1.15;
+        text-shadow: none;
+        filter: drop-shadow(0 0 30px rgba(230, 57, 70, 0.15));
     }
-    @keyframes logoGlow {
-        0%, 100% { filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.3)); }
-        50% { filter: drop-shadow(0 0 40px rgba(230, 57, 70, 0.6)); }
+    .main-header::after {
+        content: 'Heal Buddy';
+        position: absolute;
+        top: 0.6rem; left: 0; right: 0;
+        font-family: 'Playfair Display', serif;
+        font-size: 48px; font-weight: 700;
+        letter-spacing: 0.04em;
+        background: linear-gradient(135deg, transparent 20%, rgba(230, 57, 70, 0.08) 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: blur(16px);
+        z-index: -1;
     }
     .sub-header {
         font-family: 'Hanken Grotesk', sans-serif;
-        color: rgba(171, 137, 135, 0.6);
+        color: rgba(171, 137, 135, 0.5);
         text-align: center;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         margin-bottom: 1.5rem;
+        margin-top: 0.25rem;
         font-weight: 300;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
         position: relative;
         z-index: 1;
     }
@@ -272,7 +292,8 @@ st.markdown("""
 
     @media (max-width: 768px) {
         .spacer { height: 140px; }
-        .main-header img { max-height: 70px; }
+        .main-header h1 { font-size: 32px; }
+        .main-header::after { font-size: 32px; top: 0.6rem; }
         div[data-testid="stChatMessage"] > div:first-child {
             max-width: 90% !important;
         }
@@ -365,9 +386,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-with open(HEADER_LOGO, "rb") as f:
-    logo_b64 = base64.b64encode(f.read()).decode()
-st.markdown(f"<div class='main-header'><img src='data:image/png;base64,{logo_b64}' /></div>", unsafe_allow_html=True)
+st.markdown("<div class='main-header'><h1>Heal Buddy</h1></div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
