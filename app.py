@@ -101,7 +101,6 @@ with st.sidebar:
         if st.button(q, use_container_width=True):
             st.session_state.quick_q = q
     st.divider()
-    st.caption("Built with Streamlit + Groq")
     st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<div class='main-header'>🩺 MediBot</div>", unsafe_allow_html=True)
