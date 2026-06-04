@@ -24,24 +24,20 @@ for ext in ["png", "jpg", "jpeg", "webp"]:
         ASSISTANT_AVATAR = str(p)
         break
 if not ASSISTANT_AVATAR:
-    ASSISTANT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232D7DA1'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='50' fill='white'%3E🩺%3C/text%3E%3C/svg%3E"
+    ASSISTANT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23B71C1C'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='50' fill='white'%3E🩺%3C/text%3E%3C/svg%3E"
 
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <style>
     @keyframes pulse {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(209, 242, 235, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(209, 242, 235, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(209, 242, 235, 0); }
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 154, 154, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 154, 154, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 154, 154, 0); }
     }
     @keyframes fadeUp {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes shimmer {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
     }
 
     .stApp { background: #f8fafb; }
@@ -50,9 +46,9 @@ st.markdown("""
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
         background:
-            radial-gradient(ellipse at 20% 50%, rgba(209, 242, 235, 0.3) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(45, 125, 161, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 80%, rgba(13, 59, 64, 0.05) 0%, transparent 50%);
+            radial-gradient(ellipse at 20% 50%, rgba(255, 205, 210, 0.3) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(183, 28, 28, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 80%, rgba(198, 40, 40, 0.04) 0%, transparent 50%);
         pointer-events: none; z-index: 0;
     }
 
@@ -61,7 +57,6 @@ st.markdown("""
         backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
         border-bottom: 1px solid rgba(255,255,255,0.3) !important;
-        box-shadow: 0 4px 40px rgba(45,125,161,0.05) !important;
     }
 
     section[data-testid="stSidebar"] {
@@ -69,7 +64,6 @@ st.markdown("""
         backdrop-filter: blur(24px) !important;
         -webkit-backdrop-filter: blur(24px) !important;
         border-right: 1px solid rgba(255,255,255,0.3) !important;
-        box-shadow: 40px 0 60px rgba(45,125,161,0.03) !important;
         width: 320px !important;
     }
     section[data-testid="stSidebar"] > div { background: transparent !important; }
@@ -77,92 +71,36 @@ st.markdown("""
 
     .sidebar-brand {
         display: flex; align-items: center; gap: 12px;
-        margin-bottom: 1.5rem; padding: 0.5rem 0.5rem 0 0.5rem;
+        margin-bottom: 1.5rem; padding: 0.5rem;
     }
     .sidebar-brand-icon {
         width: 48px; height: 48px; border-radius: 12px;
-        background: linear-gradient(135deg, #2D7DA1, #D1F2EB);
+        background: linear-gradient(135deg, #C62828, #FFCDD2);
         display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 8px 20px rgba(45,125,161,0.2);
+        box-shadow: 0 8px 20px rgba(198,40,40,0.2);
     }
     .sidebar-brand-text h2 {
         font-family: 'Montserrat', sans-serif; font-size: 22px;
-        font-weight: 600; color: #0D3B40; margin: 0; line-height: 1.2;
+        font-weight: 600; color: #B71C1C; margin: 0; line-height: 1.2;
     }
     .sidebar-brand-text p {
         font-family: 'Inter', sans-serif; font-size: 13px;
-        color: #2D7DA1; opacity: 0.7; margin: 0;
+        color: #C62828; opacity: 0.7; margin: 0;
     }
-    .nav-item {
-        display: flex; align-items: center; gap: 12px;
-        padding: 12px 16px; border-radius: 12px;
-        font-family: 'Inter', sans-serif; font-size: 14px;
-        color: #414849; cursor: pointer; transition: all 0.2s;
-        border: none; background: transparent; width: 100%;
-        text-align: left; margin: 2px 0;
-    }
-    .nav-item:hover { background: rgba(255,255,255,0.5); }
-    .nav-item.active {
-        background: rgba(209,242,235,0.3); color: #0D3B40; font-weight: 600;
-    }
-    .nav-item .icon { color: #2D7DA1; }
     .upgrade-btn {
         width: 100%; padding: 16px;
-        background: linear-gradient(135deg, #2D7DA1, #0D3B40);
+        background: linear-gradient(135deg, #C62828, #B71C1C);
         color: white; font-family: 'Inter', sans-serif;
         font-weight: 700; font-size: 14px;
         border: none; border-radius: 12px;
         cursor: pointer; transition: opacity 0.2s;
-        box-shadow: 0 8px 25px rgba(45,125,161,0.3);
+        box-shadow: 0 8px 25px rgba(198,40,40,0.3);
         margin: 1rem 0;
     }
     .upgrade-btn:hover { opacity: 0.9; }
 
-    .custom-topbar {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 12px 24px;
-        background: rgba(255,255,255,0.3);
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255,255,255,0.3);
-        box-shadow: 0 4px 40px rgba(45,125,161,0.05);
-        position: sticky; top: 0; z-index: 99;
-    }
-    .topbar-left { display: flex; align-items: center; gap: 12px; }
-    .topbar-title {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 20px; font-weight: 700; color: #002428;
-    }
-    .topbar-right { display: flex; align-items: center; gap: 16px; }
-    .topbar-status {
-        display: flex; align-items: center; gap: 6px;
-        padding: 4px 14px; background: rgba(209,242,235,0.4);
-        border-radius: 9999px; border: 1px solid #D1F2EB;
-        font-family: 'Inter', sans-serif; font-size: 11px;
-        font-weight: 700; color: #0D3B40;
-        text-transform: uppercase; letter-spacing: 0.1em;
-    }
-    .topbar-status .dot {
-        width: 8px; height: 8px; background: #D1F2EB;
-        border-radius: 50%; animation: pulse 2s infinite;
-    }
-    .topbar-icon {
-        width: 40px; height: 40px; border-radius: 50%;
-        background: rgba(255,255,255,0.5);
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; transition: background 0.2s;
-    }
-    .topbar-icon:hover { background: rgba(255,255,255,0.8); }
-    .topbar-avatar {
-        width: 40px; height: 40px; border-radius: 50%;
-        background: linear-gradient(135deg, #D1F2EB, #2D7DA1);
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; font-size: 18px;
-        box-shadow: 0 2px 8px rgba(45,125,161,0.15);
-    }
+    .topbar-hidden { display: none !important; }
 
-    .chat-area {
-        max-width: 800px; margin: 0 auto; padding: 1rem 1rem 0 1rem;
-    }
     .stChatMessage { animation: fadeUp 0.4s ease-out forwards; }
 
     div[data-testid="stChatMessage"] > div:first-child {
@@ -172,9 +110,9 @@ st.markdown("""
         border: 1px solid rgba(255,255,255,0.5) !important;
         border-radius: 16px 16px 16px 4px !important;
         padding: 1rem 1.25rem !important;
-        color: #0D3B40 !important;
+        color: #4a1a1a !important;
         font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6;
-        box-shadow: 0 4px 15px rgba(45,125,161,0.05) !important;
+        box-shadow: 0 4px 15px rgba(198,40,40,0.05) !important;
         max-width: 85%; position: relative; overflow: hidden;
     }
     div[data-testid="stChatMessage"] > div:first-child::after {
@@ -189,11 +127,11 @@ st.markdown("""
     }
 
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child {
-        background: #0D3B40 !important;
+        background: linear-gradient(135deg, #C62828, #B71C1C) !important;
         border: none !important;
         border-radius: 16px 16px 4px 16px !important;
         color: white !important;
-        box-shadow: 0 4px 15px rgba(13,59,64,0.15) !important;
+        box-shadow: 0 4px 15px rgba(183,28,28,0.2) !important;
         margin-left: auto; max-width: 85%;
     }
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child::after {
@@ -211,24 +149,24 @@ st.markdown("""
         -webkit-backdrop-filter: blur(20px) !important;
         border: 1px solid rgba(255,255,255,0.3) !important;
         border-radius: 9999px !important;
-        box-shadow: 0 20px 50px rgba(45,125,161,0.1) !important;
+        box-shadow: 0 20px 50px rgba(198,40,40,0.08) !important;
         padding: 4px 4px 4px 20px !important;
         max-width: 800px !important; margin: 0 auto !important;
     }
     div[data-testid="stBottom"] textarea {
         font-family: 'Inter', sans-serif !important;
-        font-size: 16px !important; color: #0D3B40 !important;
+        font-size: 16px !important; color: #4a1a1a !important;
         background: transparent !important; border: none !important;
         outline: none !important; box-shadow: none !important;
         padding: 8px 0 !important;
     }
     div[data-testid="stBottom"] textarea::placeholder {
-        color: rgba(45,125,161,0.4) !important;
+        color: rgba(198,40,40,0.35) !important;
     }
     div[data-testid="stBottom"] button {
-        background: linear-gradient(135deg, #2D7DA1, #0D3B40) !important;
+        background: linear-gradient(135deg, #C62828, #B71C1C) !important;
         border-radius: 9999px !important; border: none !important;
-        box-shadow: 0 0 20px rgba(209,242,235,0.4) !important;
+        box-shadow: 0 0 20px rgba(239,154,154,0.4) !important;
         transition: all 0.2s !important;
         min-width: 48px !important; min-height: 48px !important;
     }
@@ -241,24 +179,22 @@ st.markdown("""
         font-weight: 500 !important; transition: all 0.2s !important;
         border: 1px solid rgba(255,255,255,0.3) !important;
         background: rgba(255,255,255,0.5) !important;
-        color: #0D3B40 !important;
+        color: #B71C1C !important;
     }
     .stSidebar .stButton button:hover {
-        background: rgba(209,242,235,0.3) !important;
-        border-color: rgba(45,125,161,0.2) !important;
+        background: rgba(255,205,210,0.3) !important;
+        border-color: rgba(198,40,40,0.2) !important;
     }
     .stSidebar .stInfo {
         font-family: 'Inter', sans-serif !important; font-size: 14px !important;
-        background: rgba(209,242,235,0.2) !important;
-        border: 1px solid rgba(209,242,235,0.3) !important;
-        color: #0D3B40 !important;
+        background: rgba(255,205,210,0.2) !important;
+        border: 1px solid rgba(255,205,210,0.3) !important;
+        color: #B71C1C !important;
     }
-    .stSpinner > div { border-color: #2D7DA1 !important; }
+    .stSpinner > div { border-color: #C62828 !important; }
     .spacer { height: 120px; }
     @media (max-width: 768px) {
         .spacer { height: 140px; }
-        .custom-topbar { padding: 10px 16px; }
-        .topbar-status span { display: none; }
     }
     footer { display: none; }
     #MainMenu { visibility: hidden; }
@@ -269,7 +205,7 @@ with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
         <div class="sidebar-brand-icon">
-            <span class="material-symbols-outlined" style="color:white; font-variation-settings:'FILL' 1;">medical_services</span>
+            <span class="material-symbols-outlined" style="color:white; font-variation-settings:'FILL' 1;">smart_toy</span>
         </div>
         <div class="sidebar-brand-text">
             <h2>MediBot</h2>
@@ -316,24 +252,24 @@ with st.sidebar:
             st.session_state.quick_q = q
     st.divider()
 
-st.markdown("""
-<div class="custom-topbar">
-    <div class="topbar-left">
-        <span class="material-symbols-outlined" style="color:#2D7DA1; font-size:28px;">smart_toy</span>
-        <span class="topbar-title">MediBot</span>
-    </div>
-    <div class="topbar-right">
-        <div class="topbar-status">
-            <div class="dot"></div>
-            <span>System Live</span>
-        </div>
-        <div class="topbar-icon">
-            <span class="material-symbols-outlined" style="color:#2D7DA1;">notifications</span>
-        </div>
-        <div class="topbar-avatar">👤</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# st.markdown("""
+# <div class="custom-topbar">
+#     <div class="topbar-left">
+#         <span class="material-symbols-outlined" style="color:#2D7DA1; font-size:28px;">smart_toy</span>
+#         <span class="topbar-title">MediBot</span>
+#     </div>
+#     <div class="topbar-right">
+#         <div class="topbar-status">
+#             <div class="dot"></div>
+#             <span>System Live</span>
+#         </div>
+#         <div class="topbar-icon">
+#             <span class="material-symbols-outlined" style="color:#2D7DA1;">notifications</span>
+#         </div>
+#         <div class="topbar-avatar">👤</div>
+#     </div>
+# </div>
+# """, unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
