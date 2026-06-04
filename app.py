@@ -3,6 +3,7 @@ from groq import Groq
 import os
 import random
 from dotenv import load_dotenv
+from streamlit.components.v1 import html as html_component
 
 load_dotenv("gemini.env")
 api_key = os.getenv("GROQ_API_KEY")
@@ -78,6 +79,14 @@ st.markdown("""
         font-weight: 600;
     }
     footer {display: none}
+    .spacer {
+        height: 100px;
+    }
+    @media (max-width: 768px) {
+        .spacer {
+            height: 120px;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -128,6 +137,15 @@ for msg in st.session_state.messages:
     avatar = "🧑" if msg["role"] == "user" else "🩺"
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
+
+html_component("""
+<script>
+    const el = document.querySelector('[data-testid="stAppViewContainer"]');
+    if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
+</script>
+""", height=0)
+
+st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
 sys_prompt = "You are a warm, caring nurse assistant. Speak with kindness and empathy like a real nurse would. If the user asks something off-topic (not health-related), gently steer them back — don't refuse bluntly. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
 
