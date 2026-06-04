@@ -46,51 +46,10 @@ st.markdown("""
     }
 
     section[data-testid="stSidebar"] {
-        background: #0d0d0d !important;
-        border-right: 1px solid #1a0a0a !important;
-        min-width: 280px !important;
-        max-width: 320px !important;
+        display: none !important;
     }
-    section[data-testid="stSidebar"] > div { background: transparent !important; }
-    div[data-testid="stSidebarUserContent"] { padding: 1rem 1rem 0 1rem !important; }
-
-    .sidebar-brand {
-        display: flex; align-items: center; gap: 12px;
-        margin-bottom: 1.5rem; padding: 0.25rem;
-    }
-    .sidebar-brand-icon {
-        width: 44px; height: 44px; border-radius: 12px;
-        background: linear-gradient(135deg, #E63946, #8B0000);
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-    }
-    .sidebar-brand-text h2 {
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-size: 20px; font-weight: 700;
-        color: #e5e2e1; margin: 0; line-height: 1.2;
-    }
-    .sidebar-brand-text p {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 11px; color: #ab8987; margin: 0; letter-spacing: 0.05em;
-    }
-
-    .nav-btn {
-        width: 100% !important;
-        background: transparent !important;
-        border: 1px solid #2a1212 !important;
-        color: #e5e2e1 !important;
-        font-family: 'Hanken Grotesk', sans-serif !important;
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        border-radius: 8px !important;
-        padding: 10px 14px !important;
-        text-align: left !important;
-        transition: all 0.15s !important;
-        margin: 3px 0 !important;
-    }
-    .nav-btn:hover {
-        background: rgba(230, 57, 70, 0.05) !important;
-        border-color: #E63946 !important;
+    .stApp > div:first-child {
+        margin-left: 0 !important;
     }
 
     .upgrade-btn {
@@ -126,7 +85,39 @@ st.markdown("""
         margin: 0.5rem 0;
     }
 
-    /* Assistant (bot) chat bubble */
+    /* Avatar images - zoom/crop to remove whitespace */
+    div[data-testid="chatAvatarIcon-assistant"] img,
+    div[data-testid="chatAvatarIcon-user"] img {
+        width: 40px !important;
+        height: 40px !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
+        border: 2px solid #2a1212 !important;
+        transform: scale(1.3) !important;
+    }
+    div[data-testid="chatAvatarIcon-assistant"],
+    div[data-testid="chatAvatarIcon-user"] {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        overflow: hidden !important;
+        border-radius: 50% !important;
+    }
+
+    /* User bubble - avatar on left, content on right */
+    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child {
+        background: #2A1212 !important;
+        border: none !important;
+        border-radius: 0 8px 8px 8px !important;
+        padding: 1rem 1.25rem !important;
+        color: #e0e0e0 !important;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 15px; line-height: 1.6;
+        max-width: 82%;
+        box-shadow: none !important;
+    }
+
+    /* Assistant bubble - content on left, avatar on right */
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) > div:first-child {
         background: #1A1A1A !important;
         border-left: 4px solid #E63946 !important;
@@ -140,24 +131,6 @@ st.markdown("""
         border-top: none !important;
         border-right: none !important;
         border-bottom: none !important;
-    }
-
-    /* User chat bubble */
-    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
-        display: flex;
-        justify-content: flex-end;
-    }
-    div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) > div:first-child {
-        background: #2A1212 !important;
-        border: none !important;
-        border-radius: 8px 8px 0 8px !important;
-        padding: 1rem 1.25rem !important;
-        color: #e0e0e0 !important;
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-size: 15px; line-height: 1.6;
-        max-width: 82%;
-        margin-left: auto;
-        box-shadow: none !important;
     }
 
     /* Chat input */
@@ -202,56 +175,11 @@ st.markdown("""
     }
     div[data-testid="stBottom"] button:hover { background: #ff525b !important; }
 
-    /* Sidebar buttons */
-    .stSidebar .stButton button {
-        width: 100% !important;
-        background: transparent !important;
-        border: 1px solid #2a1212 !important;
-        color: #e5e2e1 !important;
-        font-family: 'Hanken Grotesk', sans-serif !important;
-        font-size: 13px !important;
-        font-weight: 500 !important;
-        border-radius: 8px !important;
-        padding: 8px 12px !important;
-        transition: all 0.15s !important;
-    }
-    .stSidebar .stButton button:hover {
-        background: rgba(230, 57, 70, 0.05) !important;
-        border-color: #E63946 !important;
-    }
-
-    .stSidebar .stInfo {
-        font-family: 'Hanken Grotesk', sans-serif !important;
-        font-size: 13px !important;
-        background: #1a0a0a !important;
-        border: 1px solid #2a1212 !important;
-        color: #e4bebc !important;
-    }
-
     .stSpinner > div { border-color: #E63946 !important; border-top-color: transparent !important; }
-
-    .stSidebar hr {
-        border-color: #1a0a0a !important;
-        margin: 1rem 0 !important;
-    }
-
-    .stSidebar .sidebar-section-title {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 11px;
-        font-weight: 500;
-        color: #ab8987;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        margin: 1rem 0 0.5rem 0;
-    }
 
     .spacer { height: 120px; }
 
     @media (max-width: 768px) {
-        section[data-testid="stSidebar"] {
-            min-width: 100% !important;
-            max-width: 100% !important;
-        }
         .spacer { height: 140px; }
         .main-header { font-size: 22px; }
         div[data-testid="stChatMessage"] > div:first-child {
@@ -262,67 +190,53 @@ st.markdown("""
     footer { display: none; }
     #MainMenu { visibility: hidden; }
     .stDeployButton { display: none !important; }
-
-    .quick-q-label {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 11px;
-        font-weight: 500;
-        color: #ab8987;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        margin: 1rem 0 0.5rem 0;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-with st.sidebar:
-    st.markdown("""
-    <div class="sidebar-brand">
-        <div class="sidebar-brand-icon">
-            <span class="material-symbols-outlined" style="color:white; font-size:24px;">smart_toy</span>
-        </div>
-        <div class="sidebar-brand-text">
-            <h2>MediBot</h2>
-            <p>Clinical Assistant</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    if st.button("➕ New Consultation", use_container_width=True):
-        st.session_state.messages = []
-        st.rerun()
-    if st.button("📋 Health History", use_container_width=True):
-        st.info("Health history feature coming soon.")
-    if st.button("📊 Insights", use_container_width=True):
-        st.info("Insights feature coming soon.")
-    if st.button("⚙️ Settings", use_container_width=True):
-        st.info("Settings feature coming soon.")
-
-    st.markdown("<button class='upgrade-btn'>Upgrade to Pro</button>", unsafe_allow_html=True)
-
-    if st.button("❓ Help Center", use_container_width=True):
-        st.info("Help center coming soon.")
-
-    st.markdown("<div class='quick-q-label'>Quick Questions</div>", unsafe_allow_html=True)
-    if "sample_qs" not in st.session_state:
-        all_qs = [
-            "What are symptoms of dehydration?",
-            "How to lower blood pressure naturally?",
-            "What vitamins boost immunity?",
-            "First aid for minor burns?",
-            "Signs of a vitamin D deficiency?",
-            "How to improve sleep quality?",
-            "Foods high in iron?",
-            "What helps with headaches?",
-            "Benefits of drinking water?",
-            "How to reduce stress naturally?",
-            "Symptoms of food poisoning?",
-            "What is normal blood sugar range?",
-        ]
-        st.session_state.sample_qs = random.sample(all_qs, 4)
-    for q in st.session_state.sample_qs:
-        if st.button(q, use_container_width=True):
-            st.session_state.quick_q = q
+# with st.sidebar:
+#     st.markdown("""
+#     <div class="sidebar-brand">
+#         <div class="sidebar-brand-icon">
+#             <span class="material-symbols-outlined" style="color:white; font-size:24px;">smart_toy</span>
+#         </div>
+#         <div class="sidebar-brand-text">
+#             <h2>MediBot</h2>
+#             <p>Clinical Assistant</p>
+#         </div>
+#     </div>
+#     """, unsafe_allow_html=True)
+#     if st.button("➕ New Consultation", use_container_width=True):
+#         st.session_state.messages = []
+#         st.rerun()
+#     if st.button("📋 Health History", use_container_width=True):
+#         st.info("Health history feature coming soon.")
+#     if st.button("📊 Insights", use_container_width=True):
+#         st.info("Insights feature coming soon.")
+#     if st.button("⚙️ Settings", use_container_width=True):
+#         st.info("Settings feature coming soon.")
+#     st.markdown("<button class='upgrade-btn'>Upgrade to Pro</button>", unsafe_allow_html=True)
+#     if st.button("❓ Help Center", use_container_width=True):
+#         st.info("Help center coming soon.")
+#     st.markdown("<div class='quick-q-label'>Quick Questions</div>", unsafe_allow_html=True)
+#     if "sample_qs" not in st.session_state:
+#         all_qs = [
+#             "What are symptoms of dehydration?",
+#             "How to lower blood pressure naturally?",
+#             "What vitamins boost immunity?",
+#             "First aid for minor burns?",
+#             "Signs of a vitamin D deficiency?",
+#             "How to improve sleep quality?",
+#             "Foods high in iron?",
+#             "What helps with headaches?",
+#             "Benefits of drinking water?",
+#             "How to reduce stress naturally?",
+#             "Symptoms of food poisoning?",
+#             "What is normal blood sugar range?",
+#         ]
+#         st.session_state.sample_qs = random.sample(all_qs, 4)
+#     for q in st.session_state.sample_qs:
+#         if st.button(q, use_container_width=True):
+#             st.session_state.quick_q = q
 
 st.markdown("<div class='main-header'>MediBot</div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
