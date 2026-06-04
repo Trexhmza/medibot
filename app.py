@@ -15,7 +15,7 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
-st.set_page_config(page_title="MediBot", page_icon="🩺", layout="wide")
+st.set_page_config(page_title="Heal Buddy", page_icon="🩺", layout="wide")
 
 USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
 ASSISTANT_AVATAR = "Gemini_Generated_Image_q64wzmq64wzmq64w.png"
@@ -94,7 +94,7 @@ st.markdown("""
         z-index: 1;
     }
     .main-header::after {
-        content: 'MediBot';
+        content: 'Heal Buddy';
         position: absolute;
         top: 1.2rem; left: 0; right: 0;
         font-size: 32px; font-weight: 800;
@@ -283,7 +283,7 @@ st.markdown("""
 #             <span class="material-symbols-outlined" style="color:white; font-size:24px;">smart_toy</span>
 #         </div>
 #         <div class="sidebar-brand-text">
-#             <h2>MediBot</h2>
+#             <h2>Heal Buddy</h2>
 #             <p>Clinical Assistant</p>
 #         </div>
 #     </div>
@@ -321,7 +321,7 @@ st.markdown("""
 #         if st.button(q, use_container_width=True):
 #             st.session_state.quick_q = q
 
-st.markdown("<div class='main-header'>MediBot</div>", unsafe_allow_html=True)
+st.markdown("<div class='main-header'>Heal Buddy</div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
