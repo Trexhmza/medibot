@@ -23,10 +23,9 @@ client = Groq(api_key=api_key)
 
 st.set_page_config(page_title="Heal Buddy", page_icon="🩺", layout="wide")
 
-st.markdown(
-    '<meta name="google-site-verification" content="XnIPjKe4SkmAkLFSmLZOg6WTnTZwE00P-HYF56CvUQc" />',
-    unsafe_allow_html=True
-)
+st.markdown("""<script>
+document.head.insertAdjacentHTML('beforeend', '<meta name="google-site-verification" content="XnIPjKe4SkmAkLFSmLZOg6WTnTZwE00P-HYF56CvUQc">');
+</script>""", unsafe_allow_html=True)
 
 USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
 
