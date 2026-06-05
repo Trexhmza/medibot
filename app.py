@@ -23,6 +23,13 @@ client = Groq(api_key=api_key)
 
 st.set_page_config(page_title="Heal Buddy", page_icon="🩺", layout="wide")
 
+html_component("""<script>
+const m = document.createElement('meta');
+m.name = 'google-site-verification';
+m.content = 'XnIPjKe4SkmAkLFSmLZOg6WTnTZwE00P-HYF56CvUQc';
+document.head.appendChild(m);
+</script>""")
+
 USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
 
 DOCTORS = {
