@@ -95,7 +95,9 @@
       '#hbuddy .hb-sidebar .hb-doctors{display:flex;flex-direction:column;gap:8px;padding:0;border:none}',
       '#hbuddy .hb-sidebar .hb-doc-btn{flex:none;display:flex;align-items:center;gap:12px;padding:14px 12px;text-align:left;width:100%}',
       '#hbuddy .hb-sidebar .hb-doc-btn .hb-doc-emoji{display:inline-flex;margin:0;width:36px;height:36px;align-items:center;justify-content:center;flex-shrink:0}',
-      '#hbuddy .hb-sidebar .hb-doc-btn .hb-doc-name{font-size:13px}',
+      '#hbuddy .hb-sidebar .hb-doc-btn .hb-doc-info{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}',
+      '#hbuddy .hb-sidebar .hb-doc-btn .hb-doc-name{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+      '#hbuddy .hb-sidebar .hb-doc-btn .hb-doc-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
       '#hbuddy .hb-messages{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px}',
       '#hbuddy .hb-messages::-webkit-scrollbar{width:4px}',
       '#hbuddy .hb-messages::-webkit-scrollbar-track{background:transparent}',
@@ -212,7 +214,7 @@
       var btn = document.createElement('button');
       btn.className = 'hb-doc-btn' + (key === state.selectedDoctor ? ' hb-active' : '');
       var avatar = avatarHtml(key, doc.emoji);
-      btn.innerHTML = '<span class="hb-doc-emoji">' + avatar + '</span><span class="hb-doc-name">' + doc.name + '</span><span class="hb-doc-label">' + doc.label + '</span>';
+      btn.innerHTML = '<span class="hb-doc-emoji">' + avatar + '</span><div class="hb-doc-info"><span class="hb-doc-name">' + doc.name + '</span><span class="hb-doc-label">' + doc.label + '</span></div>';
       btn.addEventListener('click', function () {
         state.selectedDoctor = key;
         renderDoctors();
