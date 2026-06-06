@@ -422,6 +422,8 @@ if "quick_q" not in st.session_state:
     st.session_state.quick_q = None
 if "assistant" not in st.session_state:
     st.session_state.assistant = "female"
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
 current_doc = DOCTORS[st.session_state.assistant]
 
@@ -445,18 +447,54 @@ with st.sidebar:
         if st.button(f"Select {doc['name']}", key=f"sel_{key}", use_container_width=True):
             st.session_state.assistant = key
             st.session_state.collapse_sidebar = True
-            st.rerun()
 
     st.divider()
 
-    if st.button("🗑️ Clear Chat", key="clear_chat", use_container_width=True):
+    if st.button("➕ New Chat", key="new_chat", use_container_width=True):
+        if st.session_state.messages:
+            title = "Chat"
+            for msg in st.session_state.messages:
+                if msg["role"] == "user":
+                    title = (msg["content"][:50] + "...") if len(msg["content"]) > 50 else msg["content"]
+                    break
+            st.session_state.chat_history.append({
+                "title": title,
+                "messages": list(st.session_state.messages),
+                "assistant": st.session_state.assistant
+            })
         st.session_state.messages = []
         st.rerun()
 
-    if st.button("🔄 Reset All", key="reset_all", use_container_width=True):
-        st.session_state.messages = []
-        st.session_state.assistant = "female"
-        st.rerun()
+    st.divider()
+
+    st.markdown("<div class='sidebar-title' style='font-size:15px;'>📋 History</div>", unsafe_allow_html=True)
+
+    if not st.session_state.chat_history:
+        st.markdown("<p style='color:rgba(171,137,135,0.5);font-size:13px;text-align:center;padding:1rem 0;'>No saved chats yet</p>", unsafe_allow_html=True)
+    else:
+        for i in range(len(st.session_state.chat_history) - 1, -1, -1):
+            session = st.session_state.chat_history[i]
+            cols = st.columns([5, 1])
+            with cols[0]:
+                if st.button(f"💬 {session['title']}", key=f"hist_load_{i}", use_container_width=True):
+                    if st.session_state.messages:
+                        curr_title = "Chat"
+                        for msg in st.session_state.messages:
+                            if msg["role"] == "user":
+                                curr_title = (msg["content"][:50] + "...") if len(msg["content"]) > 50 else msg["content"]
+                                break
+                        st.session_state.chat_history.append({
+                            "title": curr_title,
+                            "messages": list(st.session_state.messages),
+                            "assistant": st.session_state.assistant
+                        })
+                    st.session_state.messages = list(session["messages"])
+                    st.session_state.assistant = session["assistant"]
+                    st.rerun()
+            with cols[1]:
+                if st.button("✕", key=f"hist_del_{i}", use_container_width=True):
+                    st.session_state.chat_history.pop(i)
+                    st.rerun()
 
 for msg in st.session_state.messages:
     if msg["role"] == "user":
