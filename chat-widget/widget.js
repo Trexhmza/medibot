@@ -88,7 +88,7 @@
       '#hbuddy .hb-doc-btn.hb-active{border-color:#E63946;background:rgba(230,57,70,0.1);color:#e8e0e0;box-shadow:0 0 12px rgba(230,57,70,0.15)}',
       '#hbuddy .hb-sidebar-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:10;display:none}',
       '#hbuddy .hb-sidebar-overlay.hb-visible{display:block}',
-      '#hbuddy .hb-sidebar{position:absolute;top:0;right:0;bottom:0;width:260px;background:#0d0d0d;border-left:1px solid rgba(230,57,70,0.12);z-index:11;display:none;flex-direction:column;padding:20px 16px}',
+      '#hbuddy .hb-sidebar{position:absolute;top:0;right:0;bottom:0;width:100%;max-width:380px;background:#0d0d0d;border-left:1px solid rgba(230,57,70,0.12);z-index:11;display:none;flex-direction:column;padding:24px 20px}',
       '#hbuddy .hb-sidebar.hb-visible{display:flex}',
       '#hbuddy .hb-sidebar-title{font-size:15px;font-weight:600;color:#e8e0e0;margin-bottom:16px;text-align:center;padding-bottom:14px;border-bottom:1px solid rgba(230,57,70,0.08)}',
       '#hbuddy .hb-sidebar .hb-doctors{display:flex;flex-direction:column;gap:8px;padding:0;border:none}',
