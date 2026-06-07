@@ -37,10 +37,26 @@
     isOpen: false,
     selectedDoctor: 'female',
     messages: [],
-    isLoading: false
+    isLoading: false,
+    conversations: []
   };
 
   var els = {};
+
+  function loadConversations() {
+    try {
+      var raw = localStorage.getItem('hb_convs');
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveConversations() {
+    try {
+      localStorage.setItem('hb_convs', JSON.stringify(state.conversations));
+    } catch (e) {}
+  }
 
   function injectStyles() {
     if (document.getElementById('hb-styles')) return;
@@ -114,6 +130,27 @@
       '#hbuddy .hb-empty h4{font-size:16px;color:#e8e0e0;margin-bottom:4px;font-weight:600}',
       '#hbuddy .hb-empty p{font-size:13px;color:rgba(171,137,135,0.5);max-width:240px;line-height:1.5}',
       '#hbuddy .hb-error{position:absolute;bottom:76px;left:18px;right:18px;background:rgba(230,57,70,0.95);color:#fff;padding:12px 16px;border-radius:10px;font-size:13px;text-align:center;animation:hb-slideUp .3s ease;z-index:10}',
+      '#hbuddy .hb-history-btn{background:none;border:none;color:rgba(171,137,135,0.5);cursor:pointer;font-size:16px;padding:4px 6px;border-radius:6px;transition:all .2s;line-height:1}',
+      '#hbuddy .hb-history-btn:hover{background:rgba(230,57,70,0.1);color:#e8e0e0}',
+      '#hbuddy .hb-history-sidebar{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;max-width:380px;background:#0d0d0d;border-right:1px solid rgba(230,57,70,0.12);z-index:12;display:none;flex-direction:column;padding:20px 16px}',
+      '#hbuddy .hb-history-sidebar.hb-visible{display:flex}',
+      '#hbuddy .hb-history-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(230,57,70,0.08)}',
+      '#hbuddy .hb-history-header h3{font-size:15px;font-weight:600;color:#e8e0e0;margin:0}',
+      '#hbuddy .hb-history-header button{background:none;border:none;color:rgba(171,137,135,0.4);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:4px;line-height:1}',
+      '#hbuddy .hb-history-header button:hover{background:rgba(230,57,70,0.1);color:#e8e0e0}',
+      '#hbuddy .hb-new-chat-btn{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(230,57,70,0.2);background:rgba(230,57,70,0.08);color:#e8e0e0;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;margin-bottom:14px;transition:all .2s}',
+      '#hbuddy .hb-new-chat-btn:hover{background:rgba(230,57,70,0.15);border-color:#E63946}',
+      '#hbuddy .hb-history-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px}',
+      '#hbuddy .hb-history-list::-webkit-scrollbar{width:4px}',
+      '#hbuddy .hb-history-list::-webkit-scrollbar-track{background:transparent}',
+      '#hbuddy .hb-history-list::-webkit-scrollbar-thumb{background:rgba(230,57,70,0.2);border-radius:2px}',
+      '#hbuddy .hb-history-item{display:flex;align-items:center;gap:6px;padding:10px 10px;border-radius:8px;cursor:pointer;transition:background .15s;border:none;background:none;color:#c8bfbe;font-size:13px;font-family:inherit;text-align:left;width:100%}',
+      '#hbuddy .hb-history-item:hover{background:rgba(230,57,70,0.06)}',
+      '#hbuddy .hb-history-item .hb-hi-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+      '#hbuddy .hb-history-item .hb-hi-del{background:none;border:none;color:rgba(171,137,135,0.3);cursor:pointer;font-size:14px;padding:2px 4px;border-radius:4px;line-height:1;flex-shrink:0}',
+      '#hbuddy .hb-history-item .hb-hi-del:hover{color:#E63946;background:rgba(230,57,70,0.1)}',
+      '#hbuddy .hb-history-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(171,137,135,0.4);font-size:13px;text-align:center;padding:32px 16px}',
+      '#hbuddy .hb-history-empty span{font-size:32px;margin-bottom:8px}',
       '@keyframes hb-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}',
       '@keyframes hb-slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}',
       '@keyframes hb-dotPulse{0%,80%,100%{transform:scale(0.6);opacity:.3}40%{transform:scale(1);opacity:1}}',
@@ -151,6 +188,7 @@
       '<div class="hb-header-info"><h3>Heal Buddy</h3><span>Medical Information Assistant</span></div>',
       '</div>',
       '<div class="hb-header-right">',
+      '<button class="hb-history-btn" id="hb-history-btn" aria-label="History">\uD83D\uDCCB</button>',
       '<button class="hb-sidebar-btn" id="hb-sidebar-btn" aria-label="Switch doctor">\uD83D\uDC64</button>',
       '<button class="hb-header-close" id="hb-close" aria-label="Close chat">\u2715</button>',
       '</div>',
@@ -175,6 +213,14 @@
       '<div class="hb-sidebar-title">Choose Your Doctor</div>',
       '<div class="hb-doctors" id="hb-doctors"></div>',
       '</div>',
+      '<div class="hb-history-sidebar" id="hb-history-sidebar">',
+      '<div class="hb-history-header">',
+      '<h3>\uD83D\uDCCB History</h3>',
+      '<button id="hb-history-close">\u2715</button>',
+      '</div>',
+      '<button class="hb-new-chat-btn" id="hb-new-chat-btn">➕ New Chat</button>',
+      '<div class="hb-history-list" id="hb-history-list"></div>',
+      '</div>',
       '</div>'
     ].join('');
 
@@ -189,6 +235,11 @@
     els.sidebar = document.getElementById('hb-sidebar');
     els.sidebarOverlay = document.getElementById('hb-sidebar-overlay');
     els.sidebarBtn = document.getElementById('hb-sidebar-btn');
+    els.historySidebar = document.getElementById('hb-history-sidebar');
+    els.historyBtn = document.getElementById('hb-history-btn');
+    els.historyClose = document.getElementById('hb-history-close');
+    els.historyList = document.getElementById('hb-history-list');
+    els.newChatBtn = document.getElementById('hb-new-chat-btn');
   }
 
   function renderDoctors() {
@@ -222,7 +273,105 @@
     if (els.sidebar.classList.contains('hb-visible')) {
       closeSidebar();
     } else {
+      closeHistorySidebar();
       openSidebar();
+    }
+  }
+
+  function openHistorySidebar() {
+    renderHistory();
+    els.historySidebar.classList.add('hb-visible');
+  }
+
+  function closeHistorySidebar() {
+    els.historySidebar.classList.remove('hb-visible');
+  }
+
+  function toggleHistorySidebar() {
+    if (els.historySidebar.classList.contains('hb-visible')) {
+      closeHistorySidebar();
+    } else {
+      closeSidebar();
+      openHistorySidebar();
+    }
+  }
+
+  function getConversationTitle() {
+    for (var i = 0; i < state.messages.length; i++) {
+      if (state.messages[i].role === 'user') {
+        var content = state.messages[i].content;
+        return content.length > 50 ? content.substring(0, 50) + '...' : content;
+      }
+    }
+    return 'Chat';
+  }
+
+  function newChat() {
+    if (state.messages.length > 0) {
+      state.conversations.push({
+        id: Date.now(),
+        title: getConversationTitle(),
+        messages: JSON.parse(JSON.stringify(state.messages)),
+        doctor: state.selectedDoctor
+      });
+      saveConversations();
+    }
+    state.messages = [];
+    renderMessages();
+    closeHistorySidebar();
+    renderHistory();
+  }
+
+  function loadConversation(id) {
+    for (var i = 0; i < state.conversations.length; i++) {
+      if (state.conversations[i].id === id) {
+        if (state.messages.length > 0) {
+          state.conversations.push({
+            id: Date.now(),
+            title: getConversationTitle(),
+            messages: JSON.parse(JSON.stringify(state.messages)),
+            doctor: state.selectedDoctor
+          });
+        }
+        state.messages = JSON.parse(JSON.stringify(state.conversations[i].messages));
+        state.selectedDoctor = state.conversations[i].doctor || 'female';
+        saveConversations();
+        renderMessages();
+        renderDoctors();
+        closeHistorySidebar();
+        return;
+      }
+    }
+  }
+
+  function deleteConversation(id) {
+    state.conversations = state.conversations.filter(function (c) { return c.id !== id; });
+    saveConversations();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    els.historyList.innerHTML = '';
+    if (state.conversations.length === 0) {
+      els.historyList.innerHTML = '<div class="hb-history-empty"><span>\uD83D\uDCCB</span>No saved chats yet</div>';
+      return;
+    }
+    for (var i = state.conversations.length - 1; i >= 0; i--) {
+      var conv = state.conversations[i];
+      var item = document.createElement('button');
+      item.className = 'hb-history-item';
+      item.setAttribute('data-id', conv.id);
+      item.innerHTML = '<span class="hb-hi-title">\uD83D\uDCAC ' + conv.title + '</span><span class="hb-hi-del">\u2715</span>';
+      item.addEventListener('click', function (e) {
+        if (e.target.classList.contains('hb-hi-del')) {
+          var id = parseInt(e.target.closest('.hb-history-item').getAttribute('data-id'));
+          deleteConversation(id);
+          return;
+        }
+        var id = parseInt(this.getAttribute('data-id'));
+        loadConversation(id);
+      });
+      els.historyList.appendChild(item);
     }
   }
 
@@ -393,6 +542,7 @@
 
     localStorage.removeItem('hb_msgs');
     state.messages = [];
+    state.conversations = loadConversations();
 
     renderDoctors();
     renderMessages();
@@ -401,6 +551,9 @@
     els.close.addEventListener('click', close);
     els.sidebarBtn.addEventListener('click', toggleSidebar);
     els.sidebarOverlay.addEventListener('click', closeSidebar);
+    els.historyBtn.addEventListener('click', toggleHistorySidebar);
+    els.historyClose.addEventListener('click', closeHistorySidebar);
+    els.newChatBtn.addEventListener('click', newChat);
     els.send.addEventListener('click', handleSend);
     els.input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') handleSend();
@@ -413,6 +566,7 @@
     init: init,
     open: open,
     close: close,
-    toggle: toggle
+    toggle: toggle,
+    newChat: newChat
   };
 })();
