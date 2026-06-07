@@ -32,11 +32,11 @@ USER_AVATAR = "WhatsApp Image 2026-06-05 at 2.51.33 AM.jpeg"
 
 DOCTORS = {
     "female": {
-        "name": "Dr. Sarah",
+        "name": "Dr. Elena",
         "avatar": "Gemini_Generated_Image_afde05afde05afde.png",
         "label": "Caring & Warm",
         "desc": "A compassionate female doctor who listens with empathy and nurtures your concerns.",
-        "prompt": "You are Dr. Sarah, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
+        "prompt": "You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
     },
     "male": {
         "name": "Dr. James",
@@ -216,7 +216,7 @@ st.markdown("""
         -webkit-backdrop-filter: blur(8px) !important;
         transition: transform 0.2s, box-shadow 0.2s !important;
     }
-    /* Dr. Sarah — warm, soft */
+    /* Dr. Elena — warm, soft */
     div[data-testid="stChatMessage"]:has(.msg-female) > div:first-child {
         background: linear-gradient(135deg, rgba(42, 18, 18, 0.95), rgba(30, 12, 12, 0.95)) !important;
         border-left: 3px solid #E63946 !important;
