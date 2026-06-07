@@ -42,21 +42,6 @@
 
   var els = {};
 
-  function loadMessages() {
-    try {
-      var raw = localStorage.getItem('hb_msgs');
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveMessages() {
-    try {
-      localStorage.setItem('hb_msgs', JSON.stringify(state.messages));
-    } catch (e) {}
-  }
-
   function injectStyles() {
     if (document.getElementById('hb-styles')) return;
 
@@ -348,7 +333,6 @@
     els.send.disabled = true;
 
     state.messages.push({ role: 'user', content: text });
-    saveMessages();
     renderMessages();
 
     showTyping();
@@ -357,7 +341,6 @@
       var reply = await sendToAPI(text);
       hideTyping();
       state.messages.push({ role: 'assistant', content: reply, doctor: state.selectedDoctor });
-      saveMessages();
       renderMessages();
     } catch (err) {
       hideTyping();
@@ -408,7 +391,8 @@
     injectStyles();
     buildWidget();
 
-    state.messages = loadMessages();
+    localStorage.removeItem('hb_msgs');
+    state.messages = [];
 
     renderDoctors();
     renderMessages();
