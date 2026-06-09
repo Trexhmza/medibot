@@ -3,10 +3,12 @@ from groq import Groq
 import os
 import random
 import json
+import mimetypes
 import threading
 import urllib.request
 import urllib.error
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from pathlib import Path
 from dotenv import load_dotenv
 import base64
 import functools
@@ -38,6 +40,30 @@ if not os.environ.get("PROXY_STARTED"):
             self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
             self.send_header("Access-Control-Allow-Headers", "Content-Type")
             self.end_headers()
+
+        def do_GET(self):
+            if self.path == "/api/chat":
+                self.send_response(405)
+                self.end_headers()
+                return
+            serve_path = self.path.lstrip("/") or "landing.html"
+            # Security: prevent directory traversal
+            full = (WIDGET_DIR / serve_path).resolve()
+            if not str(full).startswith(str(WIDGET_DIR.resolve())):
+                self.send_response(403)
+                self.end_headers()
+                return
+            if full.is_file():
+                ctype, _ = mimetypes.guess_type(str(full))
+                self.send_response(200)
+                self.send_header("Content-Type", ctype or "application/octet-stream")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                with open(full, "rb") as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
 
         def do_POST(self):
             if self.path != "/api/chat":
@@ -78,6 +104,8 @@ if not os.environ.get("PROXY_STARTED"):
 
         def log_message(self, fmt, *args):
             pass
+
+    WIDGET_DIR = Path(__file__).resolve().parent / "chat-widget"
 
     def start_proxy():
         server = HTTPServer(("0.0.0.0", PROXY_PORT), ProxyHandler)
