@@ -3,6 +3,7 @@
 
   var CONFIG = {
     apiKey: '',
+    backendUrl: '',
     avatars: {}
   };
 
@@ -469,10 +470,6 @@
   }
 
   async function sendToAPI(userMsg, imageDataUrl) {
-    if (!CONFIG.apiKey) {
-      throw new Error('Groq API key not configured. Call HealBuddyWidget.init({ apiKey: "gsk_..." })');
-    }
-
     var systemMsg = DOCTORS[state.selectedDoctor].prompt;
 
     var userContent;
@@ -496,12 +493,23 @@
       ]
     };
 
-    var res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
+    var url, headers;
+    if (CONFIG.backendUrl) {
+      url = CONFIG.backendUrl + '/api/chat';
+      headers = { 'Content-Type': 'application/json' };
+    } else if (CONFIG.apiKey) {
+      url = 'https://api.groq.com/openai/v1/chat/completions';
+      headers = {
         'Authorization': 'Bearer ' + CONFIG.apiKey,
         'Content-Type': 'application/json'
-      },
+      };
+    } else {
+      throw new Error('Configure HealBuddyWidget.init({ backendUrl: "..." }) or { apiKey: "gsk_..." }');
+    }
+
+    var res = await fetch(url, {
+      method: 'POST',
+      headers: headers,
       body: JSON.stringify(payload)
     });
 
@@ -566,6 +574,7 @@
   function init(config) {
     if (config) {
       if (config.apiKey) CONFIG.apiKey = config.apiKey;
+      if (config.backendUrl) CONFIG.backendUrl = config.backendUrl;
       if (config.avatars) {
         if (config.avatars.user) CONFIG.avatars.user = config.avatars.user;
         if (config.avatars.female) CONFIG.avatars.female = config.avatars.female;
