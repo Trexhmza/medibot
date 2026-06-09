@@ -36,14 +36,14 @@ DOCTORS = {
         "avatar": "Gemini_Generated_Image_afde05afde05afde.png",
         "label": "Caring & Warm",
         "desc": "A compassionate female doctor who listens with empathy and nurtures your concerns.",
-        "prompt": "You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
+        "prompt": "You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: 'That's an interesting question! While I'm here to help with health topics, is there something about your wellbeing I can assist with? 😊' Always include: 'This is for reference only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
     },
     "male": {
         "name": "Dr. James",
         "avatar": "Gemini_Generated_Image_q64wzmq64wzmq64w.png",
         "label": "Cold & Professional",
         "desc": "A no-nonsense doctor who gives precise, clinical answers with a detached professional tone.",
-        "prompt": "You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth — just precise medical information. If the user asks something off-topic, state flatly: 'That is outside my scope. Please ask a health-related question.' Always include: 'This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
+        "prompt": "You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth — just precise medical answers. If the user asks something off-topic, state flatly: 'That is outside my scope. Please ask a health-related question.' Always include: 'This is for reference only, not medical advice. In emergencies, contact your doctor or emergency services.' Never diagnose or prescribe."
     }
 }
 
@@ -245,7 +245,7 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(58, 74, 107, 0.1) !important;
     }
 
-    /* Chat input */
+    /* ── Chat form (replaces chat_input) ── */
     div[data-testid="stBottom"] > div {
         background: linear-gradient(0deg, rgba(5,5,5,0.98) 0%, rgba(10,10,10,0.9) 100%) !important;
         border-top: 1px solid rgba(230, 57, 70, 0.08) !important;
@@ -314,6 +314,8 @@ st.markdown("""
         border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover { background: rgba(230, 57, 70, 0.4); }
+
+    .spacer { height: 120px; }
 
     .spacer { height: 120px; }
 
@@ -414,7 +416,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<div class='main-header'><h1>Heal Buddy</h1></div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>Medical Information Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-header'>Medical Assistant — Not a substitute for professional advice</div>", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -463,6 +465,8 @@ with st.sidebar:
                 "assistant": st.session_state.assistant
             })
         st.session_state.messages = []
+        st.session_state.uploaded_img_bytes = None
+        st.session_state.uploaded_img_type = None
         st.rerun()
 
     st.divider()
@@ -505,6 +509,8 @@ for msg in st.session_state.messages:
         avatar = DOCTORS[doc_key]["avatar"]
         marker = f"<span class='msg-{doc_key}'></span>"
     with st.chat_message(msg["role"], avatar=avatar):
+        if msg.get("image"):
+            st.image(msg["image"], width=300)
         st.markdown(f"{marker}{msg['content']}", unsafe_allow_html=True)
 
 collapse_js = ""
@@ -523,23 +529,56 @@ html_component(f"""
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
+# ── Image upload + preview ──
+if st.session_state.get("uploaded_img_bytes"):
+    pc1, pc2, pc3 = st.columns([0.12, 0.02, 0.86])
+    with pc1:
+        st.image(st.session_state.uploaded_img_bytes, width=100)
+    with pc2:
+        if st.button("✕", key="remove_img_btn"):
+            st.session_state.uploaded_img_bytes = None
+            st.session_state.uploaded_img_type = None
+            st.rerun()
+
+uploaded_img = st.file_uploader("📷 Attach an image (optional)", type=["jpg", "jpeg", "png", "webp"], key="img_upload")
+if uploaded_img is not None:
+    st.session_state.uploaded_img_bytes = uploaded_img.getvalue()
+    st.session_state.uploaded_img_type = uploaded_img.type
+    st.rerun()
+
 prompt = st.chat_input("Describe your symptoms or ask a health question...")
 if st.session_state.quick_q:
     prompt = st.session_state.quick_q
     st.session_state.quick_q = None
 
 if prompt:
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    img_bytes = st.session_state.pop("uploaded_img_bytes", None)
+    img_type = st.session_state.pop("uploaded_img_type", None)
+
+    if img_bytes:
+        b64 = base64.b64encode(img_bytes).decode()
+        image_data_url = f"data:{img_type};base64,{b64}"
+        user_content = [
+            {"type": "text", "text": prompt},
+            {"type": "image_url", "image_url": {"url": image_data_url}}
+        ]
+    else:
+        user_content = prompt
+
+    st.session_state.messages.append({"role": "user", "content": prompt, "image": img_bytes})
     with st.chat_message("user", avatar=USER_AVATAR):
+        if img_bytes:
+            st.image(img_bytes, width=300)
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=current_doc["avatar"]):
         with st.spinner("Thinking..."):
             try:
+                model = "llama-3.2-11b-vision-preview" if img_bytes else "llama-3.3-70b-versatile"
                 response = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model=model,
                     messages=[
                         {"role": "system", "content": current_doc["prompt"]},
-                        {"role": "user", "content": prompt},
+                        {"role": "user", "content": user_content},
                     ]
                 )
                 reply = response.choices[0].message.content

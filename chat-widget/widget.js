@@ -23,13 +23,13 @@
       name: 'Dr. Elena',
       label: 'Caring & Warm',
       emoji: '\uD83D\uDC69\u200D\u2695\uFE0F',
-      prompt: 'You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: "That\'s an interesting question! While I\'m here to help with health topics, is there something about your wellbeing I can assist with? \uD83D\uDE0A" Always include: "This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services." Never diagnose or prescribe.'
+      prompt: 'You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: "That\'s an interesting question! While I\'m here to help with health topics, is there something about your wellbeing I can assist with? \uD83D\uDE0A" Always include: "This is for reference only, not medical advice. In emergencies, contact your doctor or emergency services." Never diagnose or prescribe.'
     },
     male: {
       name: 'Dr. James',
       label: 'Cold & Professional',
       emoji: '\uD83D\uDC68\u200D\u2695\uFE0F',
-      prompt: 'You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth — just precise medical information. If the user asks something off-topic, state flatly: "That is outside my scope. Please ask a health-related question." Always include: "This is for informational purposes only, not medical advice. In emergencies, contact your doctor or emergency services." Never diagnose or prescribe.'
+      prompt: 'You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth — just precise medical answers. If the user asks something off-topic, state flatly: "That is outside my scope. Please ask a health-related question." Always include: "This is for reference only, not medical advice. In emergencies, contact your doctor or emergency services." Never diagnose or prescribe.'
     }
   };
 
@@ -38,7 +38,8 @@
     selectedDoctor: 'female',
     messages: [],
     isLoading: false,
-    conversations: []
+    conversations: [],
+    pendingImage: null
   };
 
   var els = {};
@@ -125,6 +126,15 @@
       '#hbuddy .hb-input-wrap button:hover{background:linear-gradient(135deg,#ff525b,#a00000);transform:scale(1.05)}',
       '#hbuddy .hb-input-wrap button:disabled{opacity:.4;cursor:not-allowed;transform:none}',
       '#hbuddy .hb-input-wrap button svg{width:18px;height:18px;fill:#fff}',
+      '#hbuddy .hb-img-btn{background:none!important;border:none;color:rgba(171,137,135,0.5);cursor:pointer;width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-size:18px;line-height:1}',
+      '#hbuddy .hb-img-btn:hover{background:rgba(230,57,70,0.1)!important;color:#e8e0e0}',
+      '#hbuddy .hb-img-preview{display:none;padding:8px 18px 0;flex-shrink:0}',
+      '#hbuddy .hb-img-preview.hb-visible{display:flex;align-items:center;gap:8px}',
+      '#hbuddy .hb-img-preview img{height:56px;width:56px;border-radius:8px;object-fit:cover;border:1px solid rgba(230,57,70,0.2)}',
+      '#hbuddy .hb-img-preview .hb-img-name{font-size:12px;color:rgba(171,137,135,0.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}',
+      '#hbuddy .hb-img-preview .hb-img-remove{background:none;border:none;color:rgba(171,137,135,0.4);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;line-height:1}',
+      '#hbuddy .hb-img-preview .hb-img-remove:hover{color:#E63946;background:rgba(230,57,70,0.1)}',
+      '#hbuddy .hb-msg-image{margin-top:6px;border-radius:8px;max-width:240px;width:100%;height:auto;display:block}',
       '#hbuddy .hb-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}',
       '#hbuddy .hb-empty-icon{font-size:40px;margin-bottom:12px}',
       '#hbuddy .hb-empty h4{font-size:16px;color:#e8e0e0;margin-bottom:4px;font-weight:600}',
@@ -185,7 +195,7 @@
       '<div class="hb-header">',
       '<div class="hb-header-left">',
       '<div class="hb-header-icon">\uD83D\uDC89</div>',
-      '<div class="hb-header-info"><h3>Heal Buddy</h3><span>Medical Information Assistant</span></div>',
+      '<div class="hb-header-info"><h3>Heal Buddy</h3><span>Medical Assistant</span></div>',
       '</div>',
       '<div class="hb-header-right">',
       '<button class="hb-history-btn" id="hb-history-btn" aria-label="History">\uD83D\uDCCB</button>',
@@ -200,14 +210,21 @@
       '<p>Describe your symptoms or ask a health-related question.</p>',
       '</div>',
       '</div>',
+      '<div class="hb-img-preview" id="hb-img-preview">',
+      '<img id="hb-img-thumb" alt="Preview">',
+      '<span class="hb-img-name" id="hb-img-name"></span>',
+      '<button class="hb-img-remove" id="hb-img-remove">\u2715</button>',
+      '</div>',
       '<div class="hb-input-area">',
       '<div class="hb-input-wrap">',
       '<input type="text" id="hb-input" placeholder="Describe your symptoms..." autocomplete="off">',
+      '<button class="hb-img-btn" id="hb-img-btn" aria-label="Attach image">\uD83D\uDCC7</button>',
       '<button id="hb-send" aria-label="Send message">',
       '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
       '</button>',
       '</div>',
       '</div>',
+      '<input type="file" id="hb-img-input" accept="image/*" hidden>',
       '<div class="hb-sidebar-overlay" id="hb-sidebar-overlay"></div>',
       '<div class="hb-sidebar" id="hb-sidebar">',
       '<div class="hb-sidebar-title">Choose Your Doctor</div>',
@@ -240,6 +257,12 @@
     els.historyClose = document.getElementById('hb-history-close');
     els.historyList = document.getElementById('hb-history-list');
     els.newChatBtn = document.getElementById('hb-new-chat-btn');
+    els.imgBtn = document.getElementById('hb-img-btn');
+    els.imgInput = document.getElementById('hb-img-input');
+    els.imgPreview = document.getElementById('hb-img-preview');
+    els.imgThumb = document.getElementById('hb-img-thumb');
+    els.imgName = document.getElementById('hb-img-name');
+    els.imgRemove = document.getElementById('hb-img-remove');
   }
 
   function renderDoctors() {
@@ -394,7 +417,12 @@
       var div = document.createElement('div');
       div.className = 'hb-msg hb-' + (isUser ? 'user' : 'assistant') + ' hb-doc-' + docKey;
       var avHtml = isUser ? avatarHtml('user', '\uD83D\uDC64') : avatarHtml(docKey, DOCTORS[docKey].emoji);
-      div.innerHTML = '<div class="hb-msg-avatar">' + avHtml + '</div><div class="hb-msg-bubble">' + escapeHtml(msg.content) + '</div>';
+      var bubbleHtml = '<div class="hb-msg-avatar">' + avHtml + '</div><div class="hb-msg-bubble">';
+      if (msg.image) {
+        bubbleHtml += '<img class="hb-msg-image" src="' + msg.image + '" alt="Uploaded image">';
+      }
+      bubbleHtml += escapeHtml(msg.content) + '</div>';
+      div.innerHTML = bubbleHtml;
       els.messages.appendChild(div);
     });
 
@@ -440,18 +468,31 @@
     setTimeout(function () { errEl.remove(); }, 5000);
   }
 
-  async function sendToAPI(userMsg) {
+  async function sendToAPI(userMsg, imageDataUrl) {
     if (!CONFIG.apiKey) {
       throw new Error('Groq API key not configured. Call HealBuddyWidget.init({ apiKey: "gsk_..." })');
     }
 
     var systemMsg = DOCTORS[state.selectedDoctor].prompt;
 
+    var userContent;
+    var model;
+    if (imageDataUrl) {
+      userContent = [
+        { type: 'text', text: userMsg },
+        { type: 'image_url', image_url: { url: imageDataUrl } }
+      ];
+      model = 'llama-3.2-11b-vision-preview';
+    } else {
+      userContent = userMsg;
+      model = 'llama-3.3-70b-versatile';
+    }
+
     var payload = {
-      model: 'llama-3.3-70b-versatile',
+      model: model,
       messages: [
         { role: 'system', content: systemMsg },
-        { role: 'user', content: userMsg }
+        { role: 'user', content: userContent }
       ]
     };
 
@@ -475,19 +516,22 @@
 
   async function handleSend() {
     var text = els.input.value.trim();
-    if (!text || state.isLoading) return;
+    var hasImage = !!state.pendingImage;
+    if ((!text && !hasImage) || state.isLoading) return;
 
     els.input.value = '';
     state.isLoading = true;
     els.send.disabled = true;
 
-    state.messages.push({ role: 'user', content: text });
+    var imgData = state.pendingImage;
+    state.messages.push({ role: 'user', content: text, image: imgData });
+    clearPendingImage();
     renderMessages();
 
     showTyping();
 
     try {
-      var reply = await sendToAPI(text);
+      var reply = await sendToAPI(text || 'Describe this image', imgData);
       hideTyping();
       state.messages.push({ role: 'assistant', content: reply, doctor: state.selectedDoctor });
       renderMessages();
@@ -558,8 +602,54 @@
     els.input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') handleSend();
     });
+    els.imgBtn.addEventListener('click', function () { els.imgInput.click(); });
+    els.imgInput.addEventListener('change', handleImageSelect);
+    els.imgRemove.addEventListener('click', clearPendingImage);
 
     scrollToBottom();
+  }
+
+  function compressImage(file, maxW, maxQ) {
+    return new Promise(function (resolve) {
+      maxW = maxW || 1024;
+      maxQ = maxQ || 0.8;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement('canvas');
+          var w = img.width, h = img.height;
+          if (w > maxW) { h = h * maxW / w; w = maxW; }
+          if (h > maxW) { w = w * maxW / h; h = maxW; }
+          canvas.width = w; canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', maxQ));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function handleImageSelect() {
+    var file = els.imgInput.files[0];
+    if (!file) return;
+    compressImage(file).then(function (dataUrl) {
+      state.pendingImage = dataUrl;
+      els.imgThumb.src = dataUrl;
+      els.imgName.textContent = file.name;
+      els.imgPreview.classList.add('hb-visible');
+      els.imgInput.value = '';
+    });
+  }
+
+  function clearPendingImage() {
+    state.pendingImage = null;
+    els.imgPreview.classList.remove('hb-visible');
+    els.imgThumb.src = '';
+    els.imgName.textContent = '';
+    els.imgInput.value = '';
   }
 
   window.HealBuddyWidget = {
