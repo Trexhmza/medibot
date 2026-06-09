@@ -245,7 +245,60 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(58, 74, 107, 0.1) !important;
     }
 
-    /* ── Chat form (replaces chat_input) ── */
+    /* ── Upload icon button ── */
+    div[data-testid="stFileUploader"] {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        display: inline-flex !important;
+        width: 40px !important;
+        min-width: 40px !important;
+        height: 40px !important;
+        position: relative !important;
+    }
+    div[data-testid="stFileUploader"] > div:first-child {
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        min-height: unset !important;
+        width: 40px !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    div[data-testid="stFileUploader"] button {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: inherit !important;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: background 0.15s !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    div[data-testid="stFileUploader"] button:hover {
+        background: rgba(230, 57, 70, 0.1) !important;
+    }
+    div[data-testid="stFileUploader"] [data-testid="stMarkdownContainer"],
+    div[data-testid="stFileUploader"] small,
+    div[data-testid="stFileUploader"] [data-testid="stFileUploaderFileName"],
+    div[data-testid="stFileUploader"] [data-testid="stFileUploaderFile"] {
+        display: none !important;
+    }
+
+
+
+    /* ── Chat input ── */
     div[data-testid="stBottom"] > div {
         background: linear-gradient(0deg, rgba(5,5,5,0.98) 0%, rgba(10,10,10,0.9) 100%) !important;
         border-top: 1px solid rgba(230, 57, 70, 0.08) !important;
@@ -529,18 +582,21 @@ html_component(f"""
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
-# ── Image upload + preview ──
+# ── Attachment bar (shown when image uploaded) ──
 if st.session_state.get("uploaded_img_bytes"):
-    pc1, pc2, pc3 = st.columns([0.12, 0.02, 0.86])
-    with pc1:
-        st.image(st.session_state.uploaded_img_bytes, width=100)
-    with pc2:
-        if st.button("✕", key="remove_img_btn"):
+    ac1, ac2, ac3 = st.columns([0.06, 0.88, 0.06])
+    with ac1:
+        st.image(st.session_state.uploaded_img_bytes, width=44)
+    with ac2:
+        st.markdown("<span style='font-size:13px;color:rgba(232,224,224,0.7);'>Image attached</span>", unsafe_allow_html=True)
+    with ac3:
+        if st.button("✕", key="remove_attach"):
             st.session_state.uploaded_img_bytes = None
             st.session_state.uploaded_img_type = None
             st.rerun()
 
-uploaded_img = st.file_uploader("📷 Attach an image (optional)", type=["jpg", "jpeg", "png", "webp"], key="img_upload")
+# ── Upload icon + chat input ──
+uploaded_img = st.file_uploader("📎", type=["jpg", "jpeg", "png", "webp"], label_visibility="collapsed", key="img_upload")
 if uploaded_img is not None:
     st.session_state.uploaded_img_bytes = uploaded_img.getvalue()
     st.session_state.uploaded_img_type = uploaded_img.type
