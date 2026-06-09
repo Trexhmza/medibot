@@ -2,13 +2,7 @@
 from groq import Groq
 import os
 import random
-import json
-import mimetypes
-import threading
-import urllib.request
-import urllib.error
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from pathlib import Path
+
 from dotenv import load_dotenv
 import base64
 import functools
@@ -27,91 +21,6 @@ if not api_key:
     st.stop()
 
 client = Groq(api_key=api_key)
-
-# ── API proxy server (keeps key server-side for widget) ──
-if not os.environ.get("PROXY_STARTED"):
-    os.environ["PROXY_STARTED"] = "1"
-    PROXY_PORT = int(os.getenv("PROXY_PORT", "8765"))
-
-    class ProxyHandler(BaseHTTPRequestHandler):
-        def do_OPTIONS(self):
-            self.send_response(200)
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
-            self.send_header("Access-Control-Allow-Headers", "Content-Type")
-            self.end_headers()
-
-        def do_GET(self):
-            if self.path == "/api/chat":
-                self.send_response(405)
-                self.end_headers()
-                return
-            serve_path = self.path.lstrip("/") or "landing.html"
-            # Security: prevent directory traversal
-            full = (WIDGET_DIR / serve_path).resolve()
-            if not str(full).startswith(str(WIDGET_DIR.resolve())):
-                self.send_response(403)
-                self.end_headers()
-                return
-            if full.is_file():
-                ctype, _ = mimetypes.guess_type(str(full))
-                self.send_response(200)
-                self.send_header("Content-Type", ctype or "application/octet-stream")
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.end_headers()
-                with open(full, "rb") as f:
-                    self.wfile.write(f.read())
-            else:
-                self.send_response(404)
-                self.end_headers()
-
-        def do_POST(self):
-            if self.path != "/api/chat":
-                self.send_response(404)
-                self.end_headers()
-                return
-            try:
-                length = int(self.headers["Content-Length"])
-                body = json.loads(self.rfile.read(length))
-                groq_payload = json.dumps(body).encode()
-                req = urllib.request.Request(
-                    "https://api.groq.com/openai/v1/chat/completions",
-                    data=groq_payload,
-                    headers={
-                        "Authorization": f"Bearer {api_key}",
-                        "Content-Type": "application/json",
-                    },
-                )
-                with urllib.request.urlopen(req) as resp:
-                    data = resp.read()
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.end_headers()
-                self.wfile.write(data)
-            except urllib.error.HTTPError as e:
-                self.send_response(e.code)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.end_headers()
-                self.wfile.write(e.read())
-            except Exception as e:
-                self.send_response(500)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode())
-
-        def log_message(self, fmt, *args):
-            pass
-
-    WIDGET_DIR = Path(__file__).resolve().parent / "chat-widget"
-
-    def start_proxy():
-        server = HTTPServer(("0.0.0.0", PROXY_PORT), ProxyHandler)
-        server.serve_forever()
-
-    threading.Thread(target=start_proxy, daemon=True).start()
 
 st.set_page_config(page_title="Heal Buddy", page_icon="🩺", layout="wide")
 

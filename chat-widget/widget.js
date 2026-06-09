@@ -504,7 +504,7 @@
         'Content-Type': 'application/json'
       };
     } else {
-      throw new Error('Configure HealBuddyWidget.init({ backendUrl: "..." }) or { apiKey: "gsk_..." }');
+      throw new Error('Add ?key=YOUR_GROQ_KEY to the URL or call HealBuddyWidget.init({ apiKey: "gsk_..." })');
     }
 
     var res = await fetch(url, {

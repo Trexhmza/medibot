@@ -335,8 +335,9 @@
   <div id="heal-buddy-widget"></div>
   <script src="widget.js"></script>
   <script>
+    var params = new URLSearchParams(window.location.search);
     HealBuddyWidget.init({
-      backendUrl: window.location.origin,
+      apiKey: params.get('key') || '',
       avatars: {
         female: 'dr-sarah.png',
         male: 'dr-james.png',
