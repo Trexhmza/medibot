@@ -629,7 +629,7 @@ if prompt:
     with st.chat_message("assistant", avatar=current_doc["avatar"]):
         with st.spinner("Thinking..."):
             try:
-                model = "llama-3.2-11b-vision-preview" if img_bytes else "llama-3.3-70b-versatile"
+                model = "meta-llama/llama-4-scout-17b-16e-instruct" if img_bytes else "llama-3.3-70b-versatile"
                 response = client.chat.completions.create(
                     model=model,
                     messages=[
