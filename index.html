@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitalCare — Your Health, Our Mission</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #07070d;
+      --surface: #0d0d1a;
+      --card: rgba(255, 255, 255, 0.035);
+      --card-hover: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --primary: #E63946;
+      --primary-dim: rgba(230, 57, 70, 0.12);
+      --primary-glow: rgba(230, 57, 70, 0.3);
+      --accent: #48cae4;
+      --accent-dim: rgba(72, 202, 228, 0.1);
+      --text: #f0f0f5;
+      --text-secondary: #8888a4;
+      --text-muted: #4a4a5e;
+      --radius: 16px;
+      --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; outline: none; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+    /* ── Mouse glow ── */
+    #mouse-glow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(230, 57, 70, 0.06), transparent 70%);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      will-change: transform;
+    }
+
+    @media (pointer: coarse) { #mouse-glow { display: none; } }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(7, 7, 13, 0.6);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: border-color 0.3s;
+    }
+
+    nav.scrolled { border-color: rgba(255, 255, 255, 0.08); }
+
+    nav .logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav .logo .mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    nav .logo span { color: var(--text); }
+    nav .logo .accent { color: var(--primary); }
+
+    nav .links { display: flex; gap: 32px; }
+
+    nav .links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    nav .links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0; right: 0;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    nav .links a:hover { color: var(--text); }
+    nav .links a:hover::after { transform: scaleX(1); }
+
+    nav .nav-cta {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    nav .nav-cta:hover {
+      background: #c1121f;
+      box-shadow: 0 0 30px rgba(230, 57, 70, 0.3);
+      transform: translateY(-1px);
+    }
+
+    nav .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 24px;
+      padding: 4px;
+    }
+
+    /* ── Universal section ── */
+    section { position: relative; }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px;
+      height: 1.5px;
+      background: var(--primary);
+    }
+
+    .section-title {
+      font-size: clamp(32px, 5vw, 48px);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 560px;
+    }
+
+    /* ── Hero / Scroll Container ── */
+    #hero {
+      position: relative;
+      height: 250vh;
+      z-index: 1;
+    }
+
+    #hero .hero-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      will-change: transform;
+    }
+
+    #hero .hero-sticky .hero-scroll-content {
+      width: 100%;
+      padding: 120px 24px 80px;
+      will-change: transform;
+    }
+
+    #hero .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-dim);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      border: 1px solid rgba(230, 57, 70, 0.15);
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 6vw, 64px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .hero-stats .stat h3 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .hero-stats .stat p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary, .btn-secondary {
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #c1121f;
+      box-shadow: 0 0 40px rgba(230, 57, 70, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--card-hover);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* ── Chat Preview ── */
+    .chat-preview {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(230, 57, 70, 0.06), 0 0 200px rgba(72, 202, 228, 0.03);
+      position: relative;
+    }
+
+    .chat-preview::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 21px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(230,57,70,0.2), transparent 40%, rgba(72,202,228,0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .chat-preview-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .chat-preview-header .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-dim), var(--accent-dim));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      border: 1.5px solid rgba(230,57,70,0.2);
+    }
+
+    .chat-preview-header .info { flex: 1; }
+
+    .chat-preview-header .name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .chat-preview-header .status {
+      font-size: 12px;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chat-preview-header .status::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .chat-preview-body {
+      padding: 20px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-preview-body .msg {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      opacity: 0;
+      animation: msg-in 0.5s ease forwards;
+    }
+
+    .chat-preview-body .msg.user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      animation-delay: 0.5s;
+    }
+
+    .chat-preview-body .msg.doc {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+      animation-delay: 2.5s;
+    }
+
+    .chat-preview-body .typing {
+      align-self: flex-start;
+      display: flex;
+      gap: 5px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      opacity: 0;
+      animation: msg-in 0.3s ease 1.5s forwards;
+    }
+
+    .chat-preview-body .typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: typing-bounce 1.2s ease-in-out infinite;
+    }
+
+    .chat-preview-body .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-preview-body .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing-bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+      30% { transform: translateY(-8px); opacity: 1; }
+    }
+
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .chat-preview-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-preview-footer .input-placeholder {
+      flex: 1;
+      height: 36px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+
+    .chat-preview-footer .send-placeholder {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--primary-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    /* ── Aurora blobs ── */
+    .aurora {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .aurora-1 {
+      width: 600px; height: 600px;
+      background: var(--primary);
+      top: -200px; left: -200px;
+      animation: aurora-drift-1 25s ease-in-out infinite;
+    }
+
+    .aurora-2 {
+      width: 500px; height: 500px;
+      background: var(--accent);
+      bottom: -150px; right: -150px;
+      animation: aurora-drift-2 30s ease-in-out infinite;
+    }
+
+    .aurora-3 {
+      width: 400px; height: 400px;
+      background: #7c3aed;
+      top: 50%; left: 50%;
+      animation: aurora-drift-3 20s ease-in-out infinite;
+    }
+
+    @keyframes aurora-drift-1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(120px, -80px) scale(1.15); }
+      66% { transform: translate(-60px, 60px) scale(0.9); }
+    }
+
+    @keyframes aurora-drift-2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-80px, -60px) scale(0.9); }
+      66% { transform: translate(60px, 40px) scale(1.1); }
+    }
+
+    @keyframes aurora-drift-3 {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-40%, -60%) scale(1.2); }
+    }
+
+    /* ── Aurora overlay on hero specifically ── */
+    #hero .aurora-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    #hero .container { position: relative; z-index: 1; }
+
+    /* ── Stats / Trust strip ── */
+    #trust {
+      padding: 60px 24px;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    #trust .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    #trust .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #trust .trust-item .num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    #trust .trust-item .label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ── How it works ── */
+    #how {
+      padding: 100px 24px;
+    }
+
+    #how .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    #how .section-header .section-sub { margin: 0 auto; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      text-align: center;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .step-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+    }
+
+    .step-card .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary-dim);
+      border: 1px solid rgba(230,57,70,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--primary);
+      margin: 0 auto 20px;
+    }
+
+    .step-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Features ── */
+    #features {
+      padding: 100px 24px;
+      background: var(--surface);
+    }
+
+    #features .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    #features .section-header .section-sub { margin: 0 auto; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: all var(--transition);
+    }
+
+    .feature-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+    }
+
+    .feature-card .f-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--primary-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 { font-size: 16px; margin-bottom: 8px; }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Doctors ── */
+    #doctors {
+      padding: 100px 24px;
+    }
+
+    #doctors .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    #doctors .section-header .section-sub { margin: 0 auto; }
+
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .doctor-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      transition: all var(--transition);
+    }
+
+    .doctor-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+    }
+
+    .doctor-card .d-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid rgba(230,57,70,0.15);
+    }
+
+    .doctor-card .d-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .doctor-card .d-info h3 { font-size: 18px; }
+
+    .doctor-card .d-info .d-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 100px;
+      margin: 6px 0 8px;
+    }
+
+    .doctor-card .d-info .d-tag.warm { background: rgba(230,57,70,0.1); color: var(--primary); }
+    .doctor-card .d-info .d-tag.clinical { background: var(--accent-dim); color: var(--accent); }
+
+    .doctor-card .d-info p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Testimonials ── */
+    #testimonials {
+      padding: 100px 24px;
+      background: var(--surface);
+    }
+
+    #testimonials .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    #testimonials .section-header .section-sub { margin: 0 auto; }
+
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .test-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+    }
+
+    .test-card::before {
+      content: '"';
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 60px;
+      line-height: 1;
+      color: var(--primary);
+      opacity: 0.2;
+      position: absolute;
+      top: 16px;
+      left: 24px;
+    }
+
+    .test-card p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 16px;
+      padding-top: 20px;
+    }
+
+    .test-card .author {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .test-card .author span {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── Final CTA ── */
+    #cta {
+      padding: 120px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cta .aurora-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    #cta .container { position: relative; z-index: 1; }
+
+    #cta h2 {
+      font-size: clamp(36px, 5vw, 52px);
+      margin-bottom: 16px;
+    }
+
+    #cta p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto 36px;
+    }
+
+    #cta .btn-primary {
+      padding: 18px 44px;
+      font-size: 17px;
+      border-radius: 14px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 24px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    footer .f-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    footer .f-links a {
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    footer .f-links a:hover { color: var(--text-secondary); }
+
+    footer p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ── Mobile nav overlay ── */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7,7,13,0.95);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .mobile-overlay.open { display: flex; }
+
+    .mobile-overlay a {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .mobile-overlay a:hover { color: var(--primary); }
+
+    .mobile-overlay .close-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 28px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      #hero { height: 200vh; }
+
+      #hero .container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero h1 { font-size: 42px; }
+      .chat-preview { max-width: 480px; margin: 0 auto; }
+      .hero-text { text-align: center; }
+      .hero p { margin: 0 auto 32px; }
+      .hero-stats { justify-content: center; }
+      .hero-btns { justify-content: center; }
+
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      nav .links { display: none; }
+      nav .nav-cta { display: none; }
+      nav .mobile-toggle { display: block; }
+
+      .hero-stats { flex-direction: column; align-items: center; gap: 16px; }
+      .hero-stats .stat { text-align: center; }
+
+      .steps { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+
+      .features-grid { grid-template-columns: 1fr; }
+
+      .doctors-grid { grid-template-columns: 1fr; }
+
+      .test-grid { grid-template-columns: 1fr; }
+
+      footer .container { flex-direction: column; text-align: center; }
+
+      #trust .container { justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 32px; letter-spacing: -1px; }
+      .hero p { font-size: 16px; }
+      .chat-preview-body { min-height: 220px; padding: 16px; }
+      .chat-preview-body .msg { max-width: 95%; }
+      .doctor-card { flex-direction: column; align-items: center; text-align: center; }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      #hero { height: 100vh; }
+      .hero-sticky { position: relative; }
+      .hero-scroll-content { transform: none !important; }
+      .aurora, #mouse-glow { display: none; }
+      .reveal { opacity: 1; transform: none; }
+      .chat-preview-body .msg,
+      .chat-preview-body .typing { opacity: 1; animation: none; }
+      .chat-preview-body .msg.user { animation-delay: 0s; }
+      .chat-preview-body .typing { animation-delay: 0s; }
+      .chat-preview-body .msg.doc { animation-delay: 0s; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mouse-glow"></div>
+
+  <nav id="nav">
+    <div class="logo">
+      <span class="mark">+</span>
+      <span><span class="accent">Vital</span>Care</span>
+    </div>
+    <div class="links">
+      <a href="#hero">Home</a>
+      <a href="#how">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#testimonials">Testimonials</a>
+    </div>
+    <button class="nav-cta chat-trigger">Start Chat</button>
+    <button class="mobile-toggle" id="mobile-open" aria-label="Open menu">☰</button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobile-overlay">
+    <button class="close-btn" id="mobile-close" aria-label="Close menu">✕</button>
+    <a href="#hero">Home</a>
+    <a href="#how">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#doctors">Doctors</a>
+    <a href="#testimonials">Testimonials</a>
+    <button class="btn-primary chat-trigger" style="margin-top:16px">Start Chat</button>
+  </div>
+
+  <!-- ═══ HERO (Scroll Container) ═══ -->
+  <section id="hero">
+    <div class="aurora-container">
+      <div class="aurora aurora-1"></div>
+      <div class="aurora aurora-2"></div>
+      <div class="aurora aurora-3"></div>
+    </div>
+    <div class="hero-sticky">
+      <div class="hero-scroll-content">
+        <div class="container">
+          <div class="hero-text">
+            <div class="hero-badge"><span class="dot"></span> Trusted by 10,000+ patients</div>
+            <h1>Your Health,<br><span class="gradient">Our Mission</span></h1>
+            <p>Expert medical care from the comfort of your home. Connect with top healthcare professionals anytime, anywhere through our intelligent AI assistant.</p>
+            <div class="hero-stats">
+              <div class="stat"><h3>10K+</h3><p>Active patients</p></div>
+              <div class="stat"><h3>24/7</h3><p>Always available</p></div>
+              <div class="stat"><h3>98%</h3><p>Satisfaction rate</p></div>
+            </div>
+            <div class="hero-btns">
+              <button class="btn-primary chat-trigger">💬 Start Consultation</button>
+              <a href="#features" class="btn-secondary">Explore Features →</a>
+            </div>
+          </div>
+          <div class="chat-preview">
+            <div class="chat-preview-header">
+              <div class="avatar">🩺</div>
+              <div class="info">
+                <div class="name">Dr. Elena</div>
+                <div class="status">Online</div>
+              </div>
+            </div>
+            <div class="chat-preview-body">
+              <div class="msg user">I've had a headache for 3 days. What should I do?</div>
+              <div class="typing"><span></span><span></span><span></span></div>
+              <div class="msg doc">Hello! I'm sorry to hear that. Can you describe where the pain is located and if you have any other symptoms? 🤔</div>
+            </div>
+            <div class="chat-preview-footer">
+              <div class="input-placeholder"></div>
+              <div class="send-placeholder">↑</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TRUST STRIP ═══ -->
+  <section id="trust">
+    <div class="container">
+      <div class="trust-item">
+        <span class="num">10,000+</span>
+        <span class="label">Patients served</span>
+      </div>
+      <div class="trust-item">
+        <span class="num">24/7</span>
+        <span class="label">Round-the-clock care</span>
+      </div>
+      <div class="trust-item">
+        <span class="num">4.9★</span>
+        <span class="label">Average rating</span>
+      </div>
+      <div class="trust-item">
+        <span class="num">98%</span>
+        <span class="label">Satisfaction rate</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <section id="how">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label reveal">Simple Process</div>
+        <h2 class="section-title reveal reveal-delay-1">How It Works</h2>
+        <p class="section-sub reveal reveal-delay-2">Three simple steps to get the care you need — no appointments, no waiting rooms, no hassle.</p>
+      </div>
+      <div class="steps">
+        <div class="step-card reveal reveal-delay-1">
+          <div class="step-num">01</div>
+          <h3>Start a Chat</h3>
+          <p>Click the chat bubble and introduce yourself. Choose your preferred doctor — warm or professional.</p>
+        </div>
+        <div class="step-card reveal reveal-delay-2">
+          <div class="step-num">02</div>
+          <h3>Describe Your Symptoms</h3>
+          <p>Tell us what you're feeling. Upload photos of rashes, injuries, or prescriptions for instant analysis.</p>
+        </div>
+        <div class="step-card reveal reveal-delay-3">
+          <div class="step-num">03</div>
+          <h3>Get Medical Guidance</h3>
+          <p>Receive clear, actionable advice from our AI assistant. Available 24/7 for follow-up questions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES ═══ -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label reveal">Why VitalCare</div>
+        <h2 class="section-title reveal reveal-delay-1">Everything You Need</h2>
+        <p class="section-sub reveal reveal-delay-2">A comprehensive healthcare companion designed to put medical expertise at your fingertips.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="f-icon">🩺</div>
+          <h3>Expert Physicians</h3>
+          <p>Board-certified doctors with years of experience across all major specialties, available on demand.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="f-icon">💬</div>
+          <h3>Instant Chat</h3>
+          <p>Message your doctor directly and get quick answers to your health questions — no scheduling needed.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="f-icon">📸</div>
+          <h3>Photo Analysis</h3>
+          <p>Snap a photo of rashes, injuries, or prescriptions. Our AI vision reads and analyzes them instantly.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="f-icon">📅</div>
+          <h3>Same-Day Appointments</h3>
+          <p>Book a video or in-person visit today — no long waiting lists, no phone tag.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="f-icon">💊</div>
+          <h3>Prescription Refills</h3>
+          <p>Request refills online and pick up at your nearest pharmacy. Less hassle, more health.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-4">
+          <div class="f-icon">🔒</div>
+          <h3>HIPAA Compliant</h3>
+          <p>Your data is encrypted and protected with industry-leading security. Your privacy is our priority.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ DOCTORS ═══ -->
+  <section id="doctors">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label reveal">Our Team</div>
+        <h2 class="section-title reveal reveal-delay-1">Meet Your Doctors</h2>
+        <p class="section-sub reveal reveal-delay-2">Choose the physician that matches your needs — each with a distinct approach to care.</p>
+      </div>
+      <div class="doctors-grid">
+        <div class="doctor-card reveal reveal-delay-1">
+          <div class="d-avatar"><img src="chat-widget/dr-sarah.png" alt="Dr. Elena"></div>
+          <div class="d-info">
+            <h3>Dr. Elena</h3>
+            <span class="d-tag warm">Caring & Warm</span>
+            <p>A compassionate physician with a gentle bedside manner. She listens carefully and explains everything in plain language. Perfect for those who want a reassuring, empathetic conversation.</p>
+          </div>
+        </div>
+        <div class="doctor-card reveal reveal-delay-2">
+          <div class="d-avatar"><img src="chat-widget/dr-james.png" alt="Dr. James"></div>
+          <div class="d-info">
+            <h3>Dr. James</h3>
+            <span class="d-tag clinical">Professional & Direct</span>
+            <p>A clinical expert who gets straight to the point. He provides precise, evidence-based guidance with efficiency. Ideal when you want a straightforward, no-nonsense medical opinion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONIALS ═══ -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label reveal">Patient Stories</div>
+        <h2 class="section-title reveal reveal-delay-1">Loved by Thousands</h2>
+        <p class="section-sub reveal reveal-delay-2">Hear from people who transformed their healthcare experience with VitalCare.</p>
+      </div>
+      <div class="test-grid">
+        <div class="test-card reveal reveal-delay-1">
+          <p>I had a question about my medication at 10 PM and got a response within minutes. The AI assistant was incredibly knowledgeable and reassuring. Truly a game-changer.</p>
+          <div class="author">Elena M. <span>— Patient</span></div>
+        </div>
+        <div class="test-card reveal reveal-delay-2">
+          <p>Being able to describe my symptoms and get immediate guidance without waiting for an appointment gave me peace of mind. I use it for every health concern now.</p>
+          <div class="author">James K. <span>— Patient</span></div>
+        </div>
+        <div class="test-card reveal reveal-delay-3">
+          <p>The photo analysis feature is incredible. I uploaded a picture of a skin rash and got detailed information within seconds. It recommended I see a dermatologist, which was spot on.</p>
+          <div class="author">Sarah L. <span>— Patient</span></div>
+        </div>
+        <div class="test-card reveal reveal-delay-4">
+          <p>I travel frequently and having 24/7 access to a medical AI that remembers my history is invaluable. It's like having a family doctor in my pocket.</p>
+          <div class="author">Michael R. <span>— Patient</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FINAL CTA ═══ -->
+  <section id="cta">
+    <div class="aurora-container">
+      <div class="aurora aurora-1" style="top:-300px;left:-200px;"></div>
+      <div class="aurora aurora-2" style="bottom:-300px;right:-200px;"></div>
+    </div>
+    <div class="container">
+      <h2 class="reveal">Ready to Transform<br>Your Healthcare?</h2>
+      <p class="reveal reveal-delay-1">Join thousands of patients who've made VitalCare their trusted health companion. Start your journey in seconds.</p>
+      <button class="btn-primary chat-trigger reveal reveal-delay-2">💬 Start Your Consultation</button>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 VitalCare. For reference only, not medical advice.</p>
+      <div class="f-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // ── Mouse glow ──
+      var glow = document.getElementById('mouse-glow');
+      document.addEventListener('mousemove', function (e) {
+        glow.style.transform = 'translate(' + (e.clientX - 250) + 'px, ' + (e.clientY - 250) + 'px)';
+      });
+
+      // ── Nav scroll effect ──
+      var nav = document.getElementById('nav');
+      window.addEventListener('scroll', function () {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+      });
+
+      // ── Scroll reveal ──
+      var revealEls = document.querySelectorAll('.reveal');
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      revealEls.forEach(function (el) { observer.observe(el); });
+
+      // ── Chat trigger buttons ──
+      document.querySelectorAll('.chat-trigger').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var params = new URLSearchParams(window.location.search);
+          var key = params.get('key') || '';
+          var url = 'chat.html';
+          if (key) url += '?key=' + encodeURIComponent(key);
+          window.location.href = url;
+        });
+      });
+
+      // ── Mobile menu ──
+      document.getElementById('mobile-open').addEventListener('click', function () {
+        document.getElementById('mobile-overlay').classList.add('open');
+      });
+      document.getElementById('mobile-close').addEventListener('click', function () {
+        document.getElementById('mobile-overlay').classList.remove('open');
+      });
+      document.getElementById('mobile-overlay').querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          document.getElementById('mobile-overlay').classList.remove('open');
+        });
+      });
+
+      // ── Hero scroll animation ──
+      var hero = document.getElementById('hero');
+      var scrollContent = hero.querySelector('.hero-scroll-content');
+      var auroraContainer = hero.querySelector('.aurora-container');
+
+      function updateHeroScale() {
+        var rect = hero.getBoundingClientRect();
+        var progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+        var scale = 1 - progress * 0.15;
+        var translateY = progress * 80;
+        scrollContent.style.transform = 'scale(' + scale + ') translateY(' + translateY + 'px)';
+        auroraContainer.style.opacity = 1 - progress * 0.6;
+      }
+
+      window.addEventListener('scroll', updateHeroScale);
+      window.addEventListener('resize', updateHeroScale);
+
+      // ── Chat preview loop ──
+      (function loopPreview() {
+        var userMsg = document.querySelector('.chat-preview-body .msg.user');
+        var typing = document.querySelector('.chat-preview-body .typing');
+        var docMsg = document.querySelector('.chat-preview-body .msg.doc');
+
+        function resetAnimation(el) {
+          if (!el) return;
+          el.style.animation = 'none';
+          void el.offsetHeight;
+          el.style.animation = '';
+        }
+
+        setInterval(function () {
+          resetAnimation(userMsg);
+          resetAnimation(typing);
+          resetAnimation(docMsg);
+        }, 7000);
+      })();
+    })();
+  </script>
+</body>
+</html>
