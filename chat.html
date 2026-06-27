@@ -12,20 +12,15 @@
     :root {
       --bg: #0a0a0f;
       --surface: #0f0f18;
-      --sidebar-bg: #0c0c14;
-      --card: rgba(255, 255, 255, 0.035);
-      --card-hover: rgba(255, 255, 255, 0.06);
-      --card-border: rgba(255, 255, 255, 0.06);
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.07);
+      --card-border: rgba(255,255,255,0.06);
       --primary: #E63946;
-      --primary-dim: rgba(230, 57, 70, 0.12);
-      --primary-glow: rgba(230, 57, 70, 0.25);
-      --accent: #48cae4;
+      --primary-dim: rgba(230,57,70,0.12);
       --text: #f0f0f5;
       --text-secondary: #8888a4;
       --text-muted: #4a4a5e;
       --radius: 12px;
-      --sidebar-w: 280px;
-      --transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     html, body { height: 100%; }
@@ -39,13 +34,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    h1, h2, h3, h4 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    a { text-decoration: none; color: inherit; }
+    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; line-height: 1.2; }
     button { cursor: pointer; font-family: inherit; border: none; outline: none; }
     input, textarea { font-family: inherit; outline: none; border: none; }
 
@@ -53,168 +42,93 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 2px; }
 
-    /* ── Layout ── */
     .app {
       display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      width: var(--sidebar-w);
-      min-width: var(--sidebar-w);
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--card-border);
-      display: flex;
       flex-direction: column;
-      transition: transform var(--transition), opacity var(--transition);
-      z-index: 100;
+      height: 100vh;
     }
 
-    .sidebar-header {
-      padding: 20px 16px 12px;
-      border-bottom: 1px solid var(--card-border);
+    /* ── Header ── */
+    header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
     }
 
-    .sidebar-header .logo {
+    header .left { display: flex; align-items: center; gap: 12px; }
+
+    header .logo {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       color: var(--primary);
     }
 
-    .sidebar-header .logo span { color: var(--text); }
+    header .logo span { color: var(--text); }
 
-    .sidebar-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 20px;
-      padding: 4px;
-      border-radius: 6px;
+    header .doctor-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 10px;
+      border-radius: 100px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
       transition: all 0.2s;
+      position: relative;
     }
 
-    .sidebar-close:hover { color: var(--text); background: var(--card); }
+    header .doctor-pill:hover { background: var(--card-hover); }
 
-    .sidebar-new-btn {
-      margin: 12px 16px;
-      padding: 10px;
-      border-radius: var(--radius);
-      border: 1px solid var(--card-border);
+    header .doctor-pill .dp-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
       background: var(--primary-dim);
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 13px;
-      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      font-size: 12px;
     }
 
-    .sidebar-new-btn:hover {
-      background: rgba(230, 57, 70, 0.2);
-      border-color: var(--primary);
+    header .doctor-pill .dp-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .doctor-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 50;
+      padding: 6px;
     }
 
-    .sidebar-section-title {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      padding: 16px 16px 8px;
-    }
+    .doctor-dropdown.open { display: block; }
 
-    .doctor-list {
-      padding: 0 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .doctor-btn {
+    .doctor-dropdown .dd-item {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 10px 12px;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      text-align: left;
-      transition: all 0.15s;
-      width: 100%;
-    }
-
-    .doctor-btn:hover { background: var(--card); color: var(--text); }
-
-    .doctor-btn.active {
-      background: var(--primary-dim);
-      color: var(--text);
-      border: 1px solid rgba(230,57,70,0.15);
-    }
-
-    .doctor-btn .d-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      overflow: hidden;
-      background: var(--card);
-    }
-
-    .doctor-btn .d-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .doctor-btn .d-avatar .d-emoji {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-
-    .doctor-btn .d-info { flex: 1; min-width: 0; }
-
-    .doctor-btn .d-name {
-      font-weight: 600;
-      font-size: 13px;
-    }
-
-    .doctor-btn .d-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .sidebar-history {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 12px;
-    }
-
-    .history-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 10px;
       border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.15s;
       font-size: 13px;
       color: var(--text-secondary);
+      transition: all 0.15s;
       width: 100%;
       background: none;
       border: none;
@@ -222,115 +136,43 @@
       font-family: inherit;
     }
 
-    .history-item:hover { background: var(--card); color: var(--text); }
+    .doctor-dropdown .dd-item:hover { background: var(--card); color: var(--text); }
 
-    .history-item .h-title {
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .doctor-dropdown .dd-item.active { background: var(--primary-dim); color: var(--text); }
 
-    .history-item .h-del {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 14px;
-      padding: 2px 4px;
-      border-radius: 4px;
-      flex-shrink: 0;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .history-item .h-del:hover { color: var(--primary); background: var(--primary-dim); }
-
-    .history-empty {
-      text-align: center;
-      padding: 40px 16px;
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .history-empty span { font-size: 28px; display: block; margin-bottom: 8px; }
-
-    /* ── Main Chat Area ── */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      background: var(--bg);
-    }
-
-    .chat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      height: 60px;
-      border-bottom: 1px solid var(--card-border);
-      flex-shrink: 0;
-      background: rgba(10, 10, 15, 0.8);
-      backdrop-filter: blur(12px);
-    }
-
-    .chat-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .sidebar-toggle {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 20px;
-      padding: 4px;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .sidebar-toggle:hover { color: var(--text); background: var(--card); }
-
-    .chat-header-info h3 {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .chat-header-info p {
-      font-size: 12px;
-      color: #22c55e;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .chat-header-info p::before {
-      content: '';
-      width: 5px;
-      height: 5px;
+    .doctor-dropdown .dd-item .dd-avatar {
+      width: 28px; height: 28px;
       border-radius: 50%;
-      background: #22c55e;
-    }
-
-    .chat-header-right {
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--card);
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      font-size: 14px;
     }
 
-    .header-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 18px;
-      padding: 6px;
+    .doctor-dropdown .dd-item .dd-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .doctor-dropdown .dd-item .dd-info { flex: 1; }
+    .doctor-dropdown .dd-item .dd-name { font-weight: 600; font-size: 13px; }
+    .doctor-dropdown .dd-item .dd-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+    header .right { display: flex; align-items: center; gap: 6px; }
+
+    .h-btn {
+      width: 34px; height: 34px;
       border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.2s;
+      font-size: 18px;
     }
 
-    .header-btn:hover { color: var(--text); background: var(--card); }
+    .h-btn:hover { background: var(--card); color: var(--text); }
 
     /* ── Messages ── */
     .messages-wrap {
@@ -342,11 +184,11 @@
 
     .messages {
       width: 100%;
-      max-width: 740px;
-      padding: 24px 24px 12px;
+      max-width: 720px;
+      padding: 32px 24px 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
     }
 
     .empty-state {
@@ -359,43 +201,50 @@
       padding: 40px 24px;
     }
 
-    .empty-state .empty-icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
+    .empty-state .e-icon {
+      width: 64px; height: 64px;
+      border-radius: 16px;
       background: var(--primary-dim);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 28px;
       margin-bottom: 20px;
-      border: 1px solid rgba(230,57,70,0.1);
     }
 
-    .empty-state h2 {
-      font-size: 22px;
-      margin-bottom: 8px;
+    .empty-state h2 { font-size: 20px; margin-bottom: 6px; }
+    .empty-state p { color: var(--text-secondary); font-size: 14px; max-width: 340px; }
+
+    .empty-state .e-docs {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
     }
 
-    .empty-state p {
+    .empty-state .e-docs button {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--card);
+      border: 1px solid var(--card-border);
       color: var(--text-secondary);
-      font-size: 15px;
-      max-width: 360px;
+      transition: all 0.2s;
     }
+
+    .empty-state .e-docs button:hover { background: var(--card-hover); color: var(--text); border-color: var(--primary); }
 
     .msg {
       display: flex;
       gap: 12px;
       max-width: 85%;
-      animation: msgIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: msgIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
     }
 
     .msg.user { align-self: flex-end; flex-direction: row-reverse; }
 
     .msg-avatar {
-      width: 32px;
-      height: 32px;
-      min-width: 32px;
+      width: 30px; height: 30px; min-width: 30px;
       border-radius: 50%;
       overflow: hidden;
       flex-shrink: 0;
@@ -403,14 +252,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    .msg-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .msg-bubble {
       padding: 12px 16px;
@@ -423,33 +268,19 @@
     .msg.user .msg-bubble {
       background: var(--primary-dim);
       border: 1px solid rgba(230,57,70,0.15);
-      color: var(--text);
       border-bottom-right-radius: 4px;
     }
 
     .msg.assistant .msg-bubble {
       background: var(--surface);
       border: 1px solid var(--card-border);
-      color: var(--text);
       border-bottom-left-radius: 4px;
     }
 
-    .msg.assistant.doc-female .msg-bubble {
-      border-left: 3px solid var(--primary);
-    }
+    .msg.assistant.doc-female .msg-bubble { border-left: 3px solid var(--primary); }
+    .msg.assistant.doc-male .msg-bubble { border-left: 3px solid #3a4a6b; }
 
-    .msg.assistant.doc-male .msg-bubble {
-      border-left: 3px solid #3a4a6b;
-    }
-
-    .msg-image {
-      margin-top: 6px;
-      border-radius: 8px;
-      max-width: 240px;
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .msg-image { margin-top: 6px; border-radius: 8px; max-width: 240px; width: 100%; height: auto; display: block; }
 
     @keyframes msgIn {
       from { opacity: 0; transform: translateY(12px); }
@@ -458,17 +289,12 @@
 
     /* ── Typing ── */
     .typing {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      align-self: flex-start;
+      display: flex; gap: 12px; align-items: flex-start; align-self: flex-start;
       animation: msgIn 0.2s ease forwards;
     }
 
     .typing .msg-bubble {
-      display: flex;
-      gap: 5px;
-      padding: 14px 18px;
+      display: flex; gap: 5px; padding: 14px 18px;
       background: var(--surface);
       border: 1px solid var(--card-border);
       border-left: 3px solid var(--primary);
@@ -476,9 +302,7 @@
     }
 
     .typing-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+      width: 8px; height: 8px; border-radius: 50%;
       background: var(--text-muted);
       animation: dotPulse 1.4s ease-in-out infinite;
     }
@@ -487,57 +311,48 @@
     .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes dotPulse {
-      0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+      0%,80%,100% { transform: scale(0.6); opacity: 0.3; }
       40% { transform: scale(1); opacity: 1; }
     }
 
-    /* ── Error ── */
     .error-toast {
       position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(230, 57, 70, 0.95);
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 10px;
-      font-size: 14px;
-      animation: msgIn 0.3s ease;
-      z-index: 1000;
-      max-width: 500px;
-      text-align: center;
+      bottom: 80px; left: 50%; transform: translateX(-50%);
+      background: rgba(230,57,70,0.95);
+      color: #fff; padding: 12px 24px;
+      border-radius: 10px; font-size: 14px;
+      animation: msgIn 0.3s ease; z-index: 1000;
+      max-width: 500px; text-align: center;
     }
 
     /* ── Input ── */
     .input-area {
-      padding: 16px 24px 20px;
+      padding: 12px 20px 20px;
       flex-shrink: 0;
       border-top: 1px solid var(--card-border);
       background: var(--bg);
     }
 
     .input-inner {
-      max-width: 740px;
+      max-width: 720px;
       margin: 0 auto;
       background: var(--surface);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 8px;
+      padding: 8px 8px 8px 12px;
       transition: border-color 0.2s;
       display: flex;
       align-items: flex-end;
-      gap: 8px;
+      gap: 4px;
     }
 
-    .input-inner:focus-within {
-      border-color: rgba(230, 57, 70, 0.4);
-    }
+    .input-inner:focus-within { border-color: rgba(230,57,70,0.35); }
 
     .input-inner textarea {
       flex: 1;
       background: none;
       border: none;
-      padding: 6px 8px;
+      padding: 6px 4px;
       font-size: 15px;
       color: var(--text);
       resize: none;
@@ -546,20 +361,12 @@
       font-family: inherit;
     }
 
-    .input-inner textarea::placeholder {
-      color: var(--text-muted);
-    }
+    .input-inner textarea::placeholder { color: var(--text-muted); }
 
-    .input-actions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-    }
+    .input-inner .ia-right { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 
-    .input-btn {
-      width: 36px;
-      height: 36px;
+    .ia-btn {
+      width: 36px; height: 36px;
       border-radius: 8px;
       border: none;
       background: transparent;
@@ -572,112 +379,137 @@
       font-size: 18px;
     }
 
-    .input-btn:hover { color: var(--text); background: var(--card); }
+    .ia-btn:hover { color: var(--text); background: var(--card); }
 
-    .input-btn.send {
+    .ia-btn.send {
       background: var(--primary);
       color: #fff;
+      font-size: 16px;
     }
 
-    .input-btn.send:hover {
+    .ia-btn.send:hover {
       background: #c1121f;
       box-shadow: 0 0 20px rgba(230,57,70,0.3);
     }
 
-    .input-btn.send:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+    .ia-btn.send:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
-    /* ── Image preview ── */
     .img-preview {
       display: none;
       align-items: center;
-      gap: 8px;
-      padding: 0 24px 8px;
+      padding: 0 20px 8px;
       flex-shrink: 0;
     }
 
     .img-preview.visible { display: flex; }
 
-    .img-preview-inner {
-      max-width: 740px;
-      margin: 0 auto;
-      width: 100%;
+    .img-preview .ip-inner {
+      max-width: 720px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .img-preview img { height: 44px; width: 44px; border-radius: 8px; object-fit: cover; border: 1px solid var(--card-border); }
+    .img-preview .ip-name { font-size: 12px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .img-preview .ip-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px; line-height: 1; }
+    .img-preview .ip-remove:hover { color: var(--primary); background: var(--primary-dim); }
+
+    /* ── History drawer ── */
+    .drawer-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 199;
+      display: none;
+    }
+
+    .drawer-overlay.open { display: block; }
+
+    .drawer {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 280px;
+      background: var(--surface);
+      border-right: 1px solid var(--card-border);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 16px 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .drawer-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .drawer-close {
+      background: none; border: none;
+      color: var(--text-muted); font-size: 18px;
+      padding: 4px; border-radius: 6px;
+    }
+
+    .drawer-close:hover { color: var(--text); background: var(--card); }
+
+    .drawer-new {
+      margin: 12px 12px 0;
+      padding: 10px;
+      border-radius: var(--radius);
+      background: var(--primary-dim);
+      border: 1px solid rgba(230,57,70,0.15);
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 13px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
     }
 
-    .img-preview img {
-      height: 48px;
-      width: 48px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 1px solid var(--card-border);
-    }
+    .drawer-new:hover { background: rgba(230,57,70,0.2); }
 
-    .img-preview .img-name {
-      font-size: 12px;
-      color: var(--text-secondary);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .drawer-list {
       flex: 1;
+      overflow-y: auto;
+      padding: 8px 12px;
     }
 
-    .img-preview .img-remove {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 16px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      line-height: 1;
+    .drawer-empty {
+      text-align: center; padding: 40px 16px;
+      color: var(--text-muted); font-size: 13px;
     }
 
-    .img-preview .img-remove:hover { color: var(--primary); background: var(--primary-dim); }
+    .drawer-empty span { font-size: 28px; display: block; margin-bottom: 8px; }
 
-    /* ── Responsive ── */
+    .drawer-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 10px; border-radius: 8px;
+      cursor: pointer; transition: background 0.15s;
+      font-size: 13px; color: var(--text-secondary);
+      width: 100%; background: none; border: none;
+      text-align: left; font-family: inherit;
+    }
+
+    .drawer-item:hover { background: var(--card); color: var(--text); }
+    .drawer-item .di-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .drawer-item .di-del { background: none; border: none; color: var(--text-muted); font-size: 14px; padding: 2px 4px; border-radius: 4px; flex-shrink: 0; cursor: pointer; line-height: 1; }
+    .drawer-item .di-del:hover { color: var(--primary); background: var(--primary-dim); }
+
     @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        transform: translateX(-100%);
-        z-index: 200;
-        box-shadow: 0 0 40px rgba(0,0,0,0.5);
-      }
-
-      .sidebar.open { transform: translateX(0); }
-
-      .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 199;
-      }
-
-      .sidebar-overlay.open { display: block; }
-
-      .chat-header { padding: 0 16px; }
-      .messages { padding: 16px 16px 8px; }
-      .input-area { padding: 12px 16px 16px; }
-
+      .messages { padding: 20px 16px 12px; gap: 16px; }
+      .input-area { padding: 10px 12px 16px; }
       .msg { max-width: 95%; }
-    }
-
-    @media (max-width: 480px) {
-      .chat-header-info h3 { font-size: 14px; }
       .msg-bubble { font-size: 14px; padding: 10px 14px; }
-      .msg { max-width: 98%; }
+      .empty-state h2 { font-size: 18px; }
     }
 
-    /* ── Reduced motion ── */
     @media (prefers-reduced-motion: reduce) {
       .msg { animation: none; }
       .typing { animation: none; }
@@ -688,66 +520,64 @@
 <body>
 
 <div class="app">
-  <!-- ═══ SIDEBAR ═══ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
+  <header>
+    <div class="left">
+      <button class="h-btn" id="history-toggle" title="Chat history">☰</button>
       <div class="logo"><span>Vital</span>Care</div>
-      <button class="sidebar-close" id="sidebar-close">✕</button>
     </div>
-    <button class="sidebar-new-btn" id="new-chat-btn">✏️ New Chat</button>
-    <div class="sidebar-section-title">Doctors</div>
-    <div class="doctor-list" id="doctor-list"></div>
-    <div class="sidebar-section-title">History</div>
-    <div class="sidebar-history" id="history-list"></div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="doctor-pill" id="doctor-pill">
+        <span class="dp-avatar" id="pill-avatar">👩‍⚕️</span>
+        <span id="pill-name">Dr. Elena</span>
+        <span style="font-size:10px;color:var(--text-muted);margin-left:2px">▾</span>
+        <div class="doctor-dropdown" id="doctor-dropdown"></div>
+      </button>
+      <button class="h-btn" id="new-chat-btn" title="New chat">✏️</button>
+    </div>
+  </header>
+
+  <div class="messages-wrap">
+    <div class="messages" id="messages">
+      <div class="empty-state" id="empty-state">
+        <div class="e-icon">💬</div>
+        <h2>How can I help you?</h2>
+        <p>Choose a doctor and describe your symptoms. Your AI medical assistant is ready.</p>
+        <div class="e-docs" id="quick-docs"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="img-preview" id="img-preview">
+    <div class="ip-inner">
+      <img id="img-thumb" alt="Preview">
+      <span class="ip-name" id="img-name"></span>
+      <button class="ip-remove" id="img-remove">✕</button>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-inner">
+      <textarea id="msg-input" rows="1" placeholder="Describe your symptoms..." autocomplete="off"></textarea>
+      <div class="ia-right">
+        <button class="ia-btn" id="img-btn" title="Attach image">📷</button>
+        <button class="ia-btn send" id="send-btn" title="Send">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="img-input" accept="image/*" hidden>
+
+  <!-- History drawer -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h3>History</h3>
+      <button class="drawer-close" id="drawer-close">✕</button>
+    </div>
+    <button class="drawer-new" id="drawer-new-btn">✏️ New Chat</button>
+    <div class="drawer-list" id="drawer-list"></div>
   </aside>
-
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
-
-  <!-- ═══ MAIN ═══ -->
-  <main class="main">
-    <div class="chat-header">
-      <div class="chat-header-left">
-        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
-        <div class="chat-header-info">
-          <h3 id="chat-title">Dr. Elena</h3>
-          <p>Online</p>
-        </div>
-      </div>
-      <div class="chat-header-right">
-        <button class="header-btn" id="delete-chat" title="Clear chat">🗑️</button>
-      </div>
-    </div>
-
-    <div class="messages-wrap">
-      <div class="messages" id="messages">
-        <div class="empty-state" id="empty-state">
-          <div class="empty-icon">💬</div>
-          <h2>How can I help you?</h2>
-          <p>Describe your symptoms or ask a health-related question. Your AI doctor is ready to assist.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="img-preview" id="img-preview">
-      <div class="img-preview-inner">
-        <img id="img-thumb" alt="Preview">
-        <span class="img-name" id="img-name"></span>
-        <button class="img-remove" id="img-remove">✕</button>
-      </div>
-    </div>
-
-    <div class="input-area">
-      <div class="input-inner">
-        <textarea id="msg-input" rows="1" placeholder="Describe your symptoms..." autocomplete="off"></textarea>
-        <div class="input-actions">
-          <button class="input-btn" id="img-btn" title="Attach image">📷</button>
-          <button class="input-btn send" id="send-btn" title="Send">↑</button>
-        </div>
-      </div>
-    </div>
-
-    <input type="file" id="img-input" accept="image/*" hidden>
-  </main>
 </div>
 
 <script>
@@ -766,14 +596,14 @@
       label: 'Caring & Warm',
       emoji: '\uD83D\uDC69\u200D\u2695\uFE0F',
       key: 'female',
-      prompt: 'You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner — like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: "That\'s an interesting question! While I\'m here to help with health topics, is there something about your wellbeing I can assist with? \uD83D\uDE0A" Always include: "This is for reference only, not medical advice. In emergencies, contact your doctor or emergency services." Never diagnose or prescribe.'
+      prompt: 'You are Dr. Elena, a warm and caring doctor. Speak with kindness, empathy, and a gentle bedside manner \u2014 like a trusted family physician who truly listens. If the user asks something off-topic (not health-related), gently steer them back with warmth. For example: "That\'s an interesting question! While I\'m here to help with health topics, is there something about your wellbeing I can assist with? \uD83D\uDE0A" Keep responses helpful and informative.'
     },
     male: {
       name: 'Dr. James',
       label: 'Professional & Direct',
       emoji: '\uD83D\uDC68\u200D\u2695\uFE0F',
       key: 'male',
-      prompt: 'You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth — just precise medical answers. If the user asks something off-topic, state flatly: "That is outside my scope. Please ask a health-related question." Always include: "This is for reference only, not medical advice. In emergencies, contact your doctor or emergency services." Never diagnose or prescribe.'
+      prompt: 'You are Dr. James, a cold and strictly professional doctor. Be direct, concise, and clinical. No pleasantries, no warmth \u2014 just precise medical answers. If the user asks something off-topic, state flatly: "That is outside my scope. Please ask a health-related question." Keep responses direct and informative.'
     }
   };
 
@@ -785,19 +615,10 @@
     pendingImage: null
   };
 
-  // ── DOM refs ──
   var $ = function (id) { return document.getElementById(id); };
   var els = {};
 
   function cacheEls() {
-    els.sidebar = $('sidebar');
-    els.sidebarOverlay = $('sidebar-overlay');
-    els.sidebarToggle = $('sidebar-toggle');
-    els.sidebarClose = $('sidebar-close');
-    els.newChat = $('new-chat-btn');
-    els.doctorList = $('doctor-list');
-    els.historyList = $('history-list');
-    els.chatTitle = $('chat-title');
     els.messages = $('messages');
     els.empty = $('empty-state');
     els.input = $('msg-input');
@@ -808,10 +629,21 @@
     els.imgThumb = $('img-thumb');
     els.imgName = $('img-name');
     els.imgRemove = $('img-remove');
-    els.deleteChat = $('delete-chat');
+    els.pill = $('doctor-pill');
+    els.pillAvatar = $('pill-avatar');
+    els.pillName = $('pill-name');
+    els.dropdown = $('doctor-dropdown');
+    els.newChat = $('new-chat-btn');
+    els.historyToggle = $('history-toggle');
+    els.drawer = $('drawer');
+    els.drawerOverlay = $('drawer-overlay');
+    els.drawerClose = $('drawer-close');
+    els.drawerNew = $('drawer-new-btn');
+    els.drawerList = $('drawer-list');
+    els.quickDocs = $('quick-docs');
   }
 
-  // ── LocalStorage ──
+  // ── Storage ──
   function loadConvs() {
     try { return JSON.parse(localStorage.getItem('vc_convs')) || []; }
     catch (e) { return []; }
@@ -822,54 +654,86 @@
     catch (e) {}
   }
 
-  // ── Doctors ──
-  function renderDoctors() {
-    els.doctorList.innerHTML = '';
+  // ── Doctor dropdown ──
+  function renderDropdown() {
+    els.dropdown.innerHTML = '';
     Object.keys(DOCTORS).forEach(function (key) {
       var doc = DOCTORS[key];
       var btn = document.createElement('button');
-      btn.className = 'doctor-btn' + (key === state.selectedDoctor ? ' active' : '');
-      var avatarUrl = CONFIG.avatars[key] || '';
-      var avatarInner = avatarUrl
-        ? '<img src="' + avatarUrl + '" alt="' + doc.name + '">'
-        : '<span class="d-emoji">' + doc.emoji + '</span>';
-      btn.innerHTML = '<div class="d-avatar">' + avatarInner + '</div><div class="d-info"><div class="d-name">' + doc.name + '</div><div class="d-label">' + doc.label + '</div></div>';
-      btn.addEventListener('click', function () {
-        state.selectedDoctor = key;
-        renderDoctors();
-        els.chatTitle.textContent = DOCTORS[key].name;
+      btn.className = 'dd-item' + (key === state.selectedDoctor ? ' active' : '');
+      var avatarSrc = CONFIG.avatars[key] || '';
+      var avatarInner = avatarSrc
+        ? '<img src="' + avatarSrc + '" alt="">'
+        : '<span style="font-size:14px">' + doc.emoji + '</span>';
+      btn.innerHTML = '<div class="dd-avatar">' + avatarInner + '</div><div class="dd-info"><div class="dd-name">' + doc.name + '</div><div class="dd-label">' + doc.label + '</div></div>';
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        selectDoctor(key);
       });
-      els.doctorList.appendChild(btn);
+      els.dropdown.appendChild(btn);
+    });
+  }
+
+  function selectDoctor(key) {
+    state.selectedDoctor = key;
+    var doc = DOCTORS[key];
+    var avatarSrc = CONFIG.avatars[key] || '';
+    els.pillAvatar.innerHTML = avatarSrc
+      ? '<img src="' + avatarSrc + '" alt="">'
+      : doc.emoji;
+    els.pillName.textContent = doc.name;
+    renderDropdown();
+    closeDropdown();
+  }
+
+  function toggleDropdown(e) {
+    e.stopPropagation();
+    els.dropdown.classList.toggle('open');
+  }
+
+  function closeDropdown() {
+    els.dropdown.classList.remove('open');
+  }
+
+  // ── Quick doctor buttons in empty state ──
+  function renderQuickDocs() {
+    els.quickDocs.innerHTML = '';
+    Object.keys(DOCTORS).forEach(function (key) {
+      var doc = DOCTORS[key];
+      var btn = document.createElement('button');
+      btn.textContent = doc.emoji + ' ' + doc.name;
+      btn.addEventListener('click', function () {
+        selectDoctor(key);
+        els.input.focus();
+      });
+      els.quickDocs.appendChild(btn);
     });
   }
 
   // ── History ──
   function renderHistory() {
-    els.historyList.innerHTML = '';
+    els.drawerList.innerHTML = '';
     if (state.conversations.length === 0) {
-      els.historyList.innerHTML = '<div class="history-empty"><span>📋</span>No saved chats yet</div>';
+      els.drawerList.innerHTML = '<div class="drawer-empty"><span>📋</span>No saved chats yet</div>';
       return;
     }
-    var list = state.conversations.slice().reverse();
-    list.forEach(function (conv) {
+    state.conversations.slice().reverse().forEach(function (conv) {
       var item = document.createElement('button');
-      item.className = 'history-item';
+      item.className = 'drawer-item';
       item.setAttribute('data-id', conv.id);
       var title = conv.title || 'Chat';
-      item.innerHTML = '<span class="h-title">💬 ' + title + '</span><span class="h-del">✕</span>';
+      item.innerHTML = '<span class="di-title">💬 ' + title + '</span><span class="di-del">✕</span>';
       item.addEventListener('click', function (e) {
-        if (e.target.classList.contains('h-del')) {
+        if (e.target.classList.contains('di-del')) {
           e.stopPropagation();
-          var id = parseInt(this.getAttribute('data-id'));
-          state.conversations = state.conversations.filter(function (c) { return c.id !== id; });
+          state.conversations = state.conversations.filter(function (c) { return c.id !== conv.id; });
           saveConvs();
           renderHistory();
           return;
         }
-        var id = parseInt(this.getAttribute('data-id'));
-        loadConversation(id);
+        loadConversation(conv.id);
       });
-      els.historyList.appendChild(item);
+      els.drawerList.appendChild(item);
     });
   }
 
@@ -883,7 +747,7 @@
     return 'Chat';
   }
 
-  function saveCurrentConversation() {
+  function saveCurrentConv() {
     if (state.messages.length === 0) return;
     state.conversations.push({
       id: Date.now(),
@@ -895,66 +759,39 @@
   }
 
   function newChat() {
-    if (state.messages.length > 0) saveCurrentConversation();
+    if (state.messages.length > 0) saveCurrentConv();
     state.messages = [];
     renderMessages();
     renderHistory();
-    closeSidebar();
+    closeDrawer();
   }
 
   function loadConversation(id) {
     for (var i = 0; i < state.conversations.length; i++) {
       if (state.conversations[i].id === id) {
-        if (state.messages.length > 0) {
-          var exists = state.conversations.some(function (c) { return c.id === state.conversations[i].id; });
-          if (!exists) saveCurrentConversation();
-        }
+        if (state.messages.length > 0) saveCurrentConv();
         state.messages = JSON.parse(JSON.stringify(state.conversations[i].messages));
         state.selectedDoctor = state.conversations[i].doctor || 'female';
         saveConvs();
+        selectDoctor(state.selectedDoctor);
         renderMessages();
-        renderDoctors();
-        els.chatTitle.textContent = DOCTORS[state.selectedDoctor].name;
-        closeSidebar();
+        renderHistory();
+        closeDrawer();
         return;
       }
     }
   }
 
-  function deleteAllMessages() {
-    if (state.messages.length > 0) newChat();
-  }
-
-  // ── Sidebar ──
-  function openSidebar() {
-    if (window.innerWidth <= 768) {
-      els.sidebar.classList.add('open');
-      els.sidebarOverlay.classList.add('open');
-    }
-  }
-
-  function closeSidebar() {
-    els.sidebar.classList.remove('open');
-    els.sidebarOverlay.classList.remove('open');
-  }
-
-  function toggleSidebar() {
-    var isOpen = els.sidebar.classList.contains('open');
-    isOpen ? closeSidebar() : openSidebar();
-  }
+  // ── Drawer ──
+  function openDrawer() { els.drawer.classList.add('open'); els.drawerOverlay.classList.add('open'); renderHistory(); }
+  function closeDrawer() { els.drawer.classList.remove('open'); els.drawerOverlay.classList.remove('open'); }
 
   // ── Messages ──
-  function escapeHtml(text) {
-    var d = document.createElement('div');
-    d.appendChild(document.createTextNode(text));
-    return d.innerHTML;
-  }
+  function escapeHtml(text) { var d = document.createElement('div'); d.appendChild(document.createTextNode(text)); return d.innerHTML; }
 
   function scrollToBottom() {
-    var wrap = document.querySelector('.messages-wrap');
-    requestAnimationFrame(function () {
-      wrap.scrollTop = wrap.scrollHeight;
-    });
+    var wrap = els.messages.parentElement;
+    requestAnimationFrame(function () { wrap.scrollTop = wrap.scrollHeight; });
   }
 
   function renderMessages() {
@@ -964,10 +801,8 @@
       return;
     }
     els.empty.style.display = 'none';
-
     var existing = els.messages.querySelectorAll('.msg');
     if (existing.length === state.messages.length) return;
-
     els.messages.querySelectorAll('.msg').forEach(function (el) { el.remove(); });
 
     state.messages.forEach(function (msg) {
@@ -975,22 +810,14 @@
       var docKey = msg.doctor || state.selectedDoctor;
       var div = document.createElement('div');
       div.className = 'msg ' + (isUser ? 'user' : 'assistant') + ' doc-' + docKey;
-
-      var avatarSrc = isUser
-        ? (CONFIG.avatars.user || '')
-        : (CONFIG.avatars[docKey] || '');
-      var avatarInner = avatarSrc
-        ? '<img src="' + avatarSrc + '" alt="">'
-        : (isUser ? '👤' : DOCTORS[docKey].emoji);
-      var bubbleHtml = '<div class="msg-avatar">' + avatarInner + '</div><div class="msg-bubble">';
-      if (msg.image) {
-        bubbleHtml += '<img class="msg-image" src="' + msg.image + '" alt="Uploaded image">';
-      }
-      bubbleHtml += escapeHtml(msg.content) + '</div>';
-      div.innerHTML = bubbleHtml;
+      var avatarSrc = isUser ? (CONFIG.avatars.user || '') : (CONFIG.avatars[docKey] || '');
+      var avatarInner = avatarSrc ? '<img src="' + avatarSrc + '" alt="">' : (isUser ? '👤' : DOCTORS[docKey].emoji);
+      var html = '<div class="msg-avatar">' + avatarInner + '</div><div class="msg-bubble">';
+      if (msg.image) html += '<img class="msg-image" src="' + msg.image + '" alt="Uploaded image">';
+      html += escapeHtml(msg.content) + '</div>';
+      div.innerHTML = html;
       els.messages.appendChild(div);
     });
-
     scrollToBottom();
   }
 
@@ -999,20 +826,15 @@
     var docKey = state.selectedDoctor;
     var doc = DOCTORS[docKey];
     var avatarSrc = CONFIG.avatars[docKey] || '';
-    var avatarInner = avatarSrc
-      ? '<img src="' + avatarSrc + '" alt="">'
-      : doc.emoji;
-    var typing = document.createElement('div');
-    typing.className = 'typing';
-    typing.innerHTML = '<div class="msg-avatar">' + avatarInner + '</div><div class="msg-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-    els.messages.appendChild(typing);
+    var avatarInner = avatarSrc ? '<img src="' + avatarSrc + '" alt="">' : doc.emoji;
+    var t = document.createElement('div');
+    t.className = 'typing';
+    t.innerHTML = '<div class="msg-avatar">' + avatarInner + '</div><div class="msg-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    els.messages.appendChild(t);
     scrollToBottom();
   }
 
-  function hideTyping() {
-    var t = els.messages.querySelector('.typing');
-    if (t) t.remove();
-  }
+  function hideTyping() { var t = els.messages.querySelector('.typing'); if (t) t.remove(); }
 
   function showError(msg) {
     var existing = document.querySelector('.error-toast');
@@ -1027,8 +849,7 @@
   // ── Image ──
   function compressImage(file, maxW, maxQ) {
     return new Promise(function (resolve) {
-      maxW = maxW || 1024;
-      maxQ = maxQ || 0.8;
+      maxW = maxW || 1024; maxQ = maxQ || 0.8;
       var reader = new FileReader();
       reader.onload = function (e) {
         var img = new Image();
@@ -1063,16 +884,14 @@
   function clearPendingImage() {
     state.pendingImage = null;
     els.imgPreview.classList.remove('visible');
-    els.imgThumb.src = '';
-    els.imgName.textContent = '';
+    els.imgThumb.src = ''; els.imgName.textContent = '';
     els.imgInput.value = '';
   }
 
   // ── API ──
   async function sendToAPI(userMsg, imageDataUrl) {
     var systemMsg = DOCTORS[state.selectedDoctor].prompt;
-    var userContent;
-    var model;
+    var userContent, model;
     if (imageDataUrl) {
       userContent = [
         { type: 'text', text: userMsg },
@@ -1083,7 +902,6 @@
       userContent = userMsg;
       model = 'llama-3.3-70b-versatile';
     }
-
     var payload = {
       model: model,
       messages: [
@@ -1091,32 +909,18 @@
         { role: 'user', content: userContent }
       ]
     };
-
     var url, headers;
     if (CONFIG.backendUrl) {
       url = CONFIG.backendUrl + '/api/chat';
       headers = { 'Content-Type': 'application/json' };
     } else if (CONFIG.apiKey) {
       url = 'https://api.groq.com/openai/v1/chat/completions';
-      headers = {
-        'Authorization': 'Bearer ' + CONFIG.apiKey,
-        'Content-Type': 'application/json'
-      };
+      headers = { 'Authorization': 'Bearer ' + CONFIG.apiKey, 'Content-Type': 'application/json' };
     } else {
-      throw new Error('API key required. Add ?key=YOUR_GROQ_KEY to the URL.');
+      throw new Error('API key required.');
     }
-
-    var res = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) {
-      var errText = await res.text();
-      throw new Error('API error (' + res.status + '): ' + errText);
-    }
-
+    var res = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(payload) });
+    if (!res.ok) { var errText = await res.text(); throw new Error('API error (' + res.status + '): ' + errText); }
     var data = await res.json();
     return data.choices[0].message.content;
   }
@@ -1125,18 +929,14 @@
     var text = els.input.value.trim();
     var hasImage = !!state.pendingImage;
     if ((!text && !hasImage) || state.isLoading) return;
-
     els.input.value = '';
     state.isLoading = true;
     els.send.disabled = true;
-
     var imgData = state.pendingImage;
     state.messages.push({ role: 'user', content: text, image: imgData });
     clearPendingImage();
     renderMessages();
-
     showTyping();
-
     try {
       var reply = await sendToAPI(text || 'Describe this image', imgData);
       hideTyping();
@@ -1146,13 +946,11 @@
       hideTyping();
       showError(err.message);
     }
-
     state.isLoading = false;
     els.send.disabled = false;
     els.input.focus();
   }
 
-  // ── Auto-resize textarea ──
   function autoResize() {
     els.input.style.height = 'auto';
     els.input.style.height = Math.min(els.input.scrollHeight, 200) + 'px';
@@ -1169,70 +967,55 @@
         if (config.avatars.male) CONFIG.avatars.male = config.avatars.male;
       }
     }
-
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', setup);
-    } else {
-      setup();
-    }
+    } else { setup(); }
   }
 
   function setup() {
     cacheEls();
-
     state.messages = [];
     state.conversations = loadConvs();
-
-    renderDoctors();
+    renderDropdown();
+    renderQuickDocs();
     renderHistory();
     renderMessages();
+    selectDoctor(state.selectedDoctor);
 
-    els.chatTitle.textContent = DOCTORS[state.selectedDoctor].name;
-
-    // ── Events ──
-    els.sidebarToggle.addEventListener('click', toggleSidebar);
-    els.sidebarClose.addEventListener('click', closeSidebar);
-    els.sidebarOverlay.addEventListener('click', closeSidebar);
-
-    els.newChat.addEventListener('click', function () {
-      newChat();
-      closeSidebar();
+    // Events
+    els.pill.addEventListener('click', toggleDropdown);
+    document.addEventListener('click', function (e) {
+      if (!els.pill.contains(e.target)) closeDropdown();
     });
 
     els.send.addEventListener('click', handleSend);
-
     els.input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
     });
-
     els.input.addEventListener('input', autoResize);
 
     els.imgBtn.addEventListener('click', function () { els.imgInput.click(); });
     els.imgInput.addEventListener('change', handleImageSelect);
     els.imgRemove.addEventListener('click', clearPendingImage);
 
-    els.deleteChat.addEventListener('click', function () {
-      if (state.messages.length === 0) return;
-      if (confirm('Start a new chat? Current conversation will be saved.')) {
-        newChat();
-      }
+    els.newChat.addEventListener('click', function () {
+      if (state.messages.length > 0) { saveCurrentConv(); newChat(); } else newChat();
     });
+
+    els.historyToggle.addEventListener('click', openDrawer);
+    els.drawerClose.addEventListener('click', closeDrawer);
+    els.drawerOverlay.addEventListener('click', closeDrawer);
+    els.drawerNew.addEventListener('click', function () { if (state.messages.length > 0) saveCurrentConv(); newChat(); closeDrawer(); });
 
     scrollToBottom();
   }
 
-  // ── Public API ──
-  window.VitalCareChat = {
-    init: init
-  };
+  window.VitalCareChat = { init: init };
 
   // ── Auto-init ──
   var params = new URLSearchParams(window.location.search);
   var apiKey = params.get('key') || '__GROQ_API_KEY__';
-  VitalCareChat.init({
+  init({
     apiKey: apiKey,
     avatars: {
       female: 'chat-widget/dr-sarah.png',
