@@ -66,97 +66,131 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
-      height: 52px;
+      padding: 0 24px;
+      height: 64px;
       border-bottom: 1px solid var(--card-border);
       flex-shrink: 0;
       background: rgba(8,8,14,0.75);
       backdrop-filter: blur(16px) saturate(1.3);
     }
 
-    header .left, header .right { flex: 1; display: flex; align-items: center; gap: 8px; }
+    header .left, header .right { flex: 1; display: flex; align-items: center; gap: 12px; }
     header .right { justify-content: flex-end; }
 
     header .logo {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 800;
       letter-spacing: -0.3px;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 10px;
       cursor: pointer;
     }
 
     header .logo .mark {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 26px; height: 26px;
+      width: 32px; height: 32px;
       background: var(--primary);
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 8px;
+      font-size: 16px;
       color: #fff;
     }
 
     header .logo span { color: var(--text); }
-    header .logo .accent { color: var(--primary); }
 
     .h-btn {
-      width: 32px; height: 32px;
-      border-radius: 8px;
+      width: 40px; height: 40px;
+      border-radius: 10px;
       background: transparent;
       color: var(--text-secondary);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
-      font-size: 17px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     .h-btn:hover { background: var(--card); color: var(--text); }
 
-    /* ── Doctor selector ── */
-    .doc-selector {
-      display: flex;
-      gap: 4px;
-      padding: 3px;
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 100px;
+    .h-btn.new-chat-btn {
+      width: auto;
+      height: 36px;
+      padding: 0 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--primary);
+      border-radius: 10px;
     }
 
-    .doc-btn {
-      padding: 5px 12px 5px 8px;
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: transparent;
+    .h-btn.new-chat-btn:hover {
+      background: #c1121f;
+      box-shadow: 0 0 30px rgba(230, 57, 70, 0.25);
+    }
+
+    /* ── Tubelight Doctor Select ── */
+    .tn-doctor-select {
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
+      gap: 3px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 3px;
+      position: relative;
     }
 
-    .doc-btn:hover { color: var(--text); }
-
-    .doc-btn.active {
-      background: var(--primary-dim);
-      color: var(--text);
+    .tn-doc-glide {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(230,57,70,0.15), rgba(72,202,228,0.08));
+      border: 1px solid rgba(230,57,70,0.1);
+      pointer-events: none;
+      transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 0;
     }
 
-    .doc-btn .db-avatar {
-      width: 22px; height: 22px;
+    .tn-doc-btn {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 18px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 0.25s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .tn-doc-btn:hover { color: var(--text-secondary); }
+    .tn-doc-btn.active { color: var(--text); }
+
+    .tn-doc-btn .tn-doc-avatar {
+      width: 26px; height: 26px;
       border-radius: 50%;
       overflow: hidden;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      background: var(--card);
+      font-size: 12px;
+      background: var(--surface);
     }
 
-    .doc-btn .db-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .tn-doc-btn .tn-doc-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     /* ── Sun rays ── */
     .sun-rays {
@@ -492,23 +526,7 @@
 
     .drawer-close:hover { color: var(--text); background: var(--card); }
 
-    .drawer-new {
-      margin: 12px 12px 0;
-      padding: 10px;
-      border-radius: var(--radius);
-      background: var(--primary-dim);
-      border: 1px solid rgba(230,57,70,0.12);
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
 
-    .drawer-new:hover { background: rgba(230,57,70,0.18); }
 
     .drawer-list {
       flex: 1;
@@ -544,14 +562,18 @@
       .msg { max-width: 95%; }
       .msg-bubble { font-size: 14px; padding: 12px 16px; }
       .empty-state h2 { font-size: 28px; }
-      header { padding: 0 12px; }
-      .doc-selector { gap: 2px; padding: 2px; }
-      .doc-btn { padding: 4px 8px 4px 6px; font-size: 11px; }
-      .doc-btn .db-avatar { width: 18px; height: 18px; font-size: 10px; }
+      header { padding: 0 16px; height: 56px; }
+      header .logo { font-size: 17px; }
+      header .logo .mark { width: 28px; height: 28px; font-size: 14px; }
+      .h-btn { width: 36px; height: 36px; font-size: 18px; }
+      .h-btn.new-chat-btn { height: 32px; padding: 0 14px; font-size: 13px; }
+      .tn-doc-btn { padding: 4px 14px; font-size: 12px; }
+      .tn-doc-btn .tn-doc-avatar { width: 22px; height: 22px; }
     }
 
     @media (max-width: 480px) {
-      .doc-btn .db-name { display: none; }
+      .tn-doc-btn span:not(.tn-doc-avatar) { display: none; }
+      .tn-doc-btn { padding: 5px 12px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -570,9 +592,19 @@
       <button class="h-btn" id="history-toggle" title="Chat history">☰</button>
       <div class="logo" id="logo-btn"><span class="mark">+</span><span>HealBuddy</span></div>
     </div>
-    <div class="doc-selector" id="doc-selector"></div>
+    <div class="tn-doctor-select" id="tn-doctor-select">
+      <div class="tn-doc-glide" id="tn-doc-glide"></div>
+      <button class="tn-doc-btn active" data-doc="elena" id="tn-doc-elena" title="Dr. Elena">
+        <span class="tn-doc-avatar" id="tn-doc-avatar-elena"></span>
+        <span>Elena</span>
+      </button>
+      <button class="tn-doc-btn" data-doc="james" id="tn-doc-james" title="Dr. James">
+        <span class="tn-doc-avatar" id="tn-doc-avatar-james"></span>
+        <span>James</span>
+      </button>
+    </div>
     <div class="right">
-      <button class="h-btn" id="new-chat-btn" title="New chat">✏️</button>
+      <button class="h-btn new-chat-btn" id="new-chat-btn">New Chat</button>
     </div>
   </header>
 
@@ -618,7 +650,6 @@
       <h3>History</h3>
       <button class="drawer-close" id="drawer-close">✕</button>
     </div>
-    <button class="drawer-new" id="drawer-new-btn">✏️ New Chat</button>
     <div class="drawer-list" id="drawer-list"></div>
   </aside>
 </div>
@@ -670,13 +701,17 @@
     els.imgBtn = $('img-btn');
     els.imgInput = $('img-input');
     els.promptFiles = $('prompt-files');
-    els.docSelector = $('doc-selector');
     els.newChat = $('new-chat-btn');
     els.historyToggle = $('history-toggle');
+    els.tnDocGlide = $('tn-doc-glide');
+    els.tnDocBtns = document.querySelectorAll('.tn-doc-btn');
+    els.tnDocElena = $('tn-doc-elena');
+    els.tnDocJames = $('tn-doc-james');
+    els.tnDocAvatarElena = $('tn-doc-avatar-elena');
+    els.tnDocAvatarJames = $('tn-doc-avatar-james');
     els.drawer = $('drawer');
     els.drawerOverlay = $('drawer-overlay');
     els.drawerClose = $('drawer-close');
-    els.drawerNew = $('drawer-new-btn');
     els.drawerList = $('drawer-list');
   }
 
@@ -690,27 +725,35 @@
     catch (e) {}
   }
 
-  // ── Doctor selector pills ──
+  // ── Doctor selector + Tubelight ──
   function renderDocSelector() {
-    els.docSelector.innerHTML = '';
     Object.keys(DOCTORS).forEach(function (key) {
       var doc = DOCTORS[key];
-      var btn = document.createElement('button');
-      btn.className = 'doc-btn' + (key === state.selectedDoctor ? ' active' : '');
-      btn.setAttribute('data-doc', key);
+      var avatarEl = key === 'female' ? els.tnDocAvatarElena : els.tnDocAvatarJames;
       var avatarSrc = CONFIG.avatars[key] || '';
-      var avatarInner = avatarSrc
+      avatarEl.innerHTML = avatarSrc
         ? '<img src="' + avatarSrc + '" alt="">'
         : doc.emoji;
-      btn.innerHTML = '<span class="db-avatar">' + avatarInner + '</span><span class="db-name">' + doc.name + '</span>';
-      btn.addEventListener('click', function () { selectDoctor(key); });
-      els.docSelector.appendChild(btn);
     });
   }
 
   function selectDoctor(key) {
     state.selectedDoctor = key;
-    renderDocSelector();
+    var docKey = key === 'female' ? 'elena' : 'james';
+    els.tnDocBtns.forEach(function (item) {
+      item.classList.toggle('active', item.dataset.doc === docKey);
+    });
+    positionDocGlide(docKey);
+  }
+
+  function positionDocGlide(docKey) {
+    var activeEl = document.querySelector('.tn-doc-btn[data-doc="' + docKey + '"]');
+    if (!activeEl || !els.tnDocGlide) return;
+    var parent = document.getElementById('tn-doctor-select');
+    var pRect = parent.getBoundingClientRect();
+    var aRect = activeEl.getBoundingClientRect();
+    els.tnDocGlide.style.left = (aRect.left - pRect.left) + 'px';
+    els.tnDocGlide.style.width = aRect.width + 'px';
   }
 
   // ── History ──
@@ -1034,7 +1077,6 @@
     renderDocSelector();
     renderHistory();
     renderMessages();
-    selectDoctor(state.selectedDoctor);
 
     els.send.addEventListener('click', handleSend);
     els.input.addEventListener('keydown', function (e) {
@@ -1048,14 +1090,29 @@
     els.logo = $('logo-btn');
     els.logo.addEventListener('click', function () { window.location.href = 'index.html'; });
 
+    // ── Header events ──
+    els.tnDocElena.addEventListener('click', function () { selectDoctor('female'); });
+    els.tnDocJames.addEventListener('click', function () { selectDoctor('male'); });
+    els.historyToggle.addEventListener('click', openDrawer);
     els.newChat.addEventListener('click', function () {
       if (state.messages.length > 0) { saveCurrentConv(); newChat(); } else newChat();
     });
 
-    els.historyToggle.addEventListener('click', openDrawer);
+    // ── Tubelight init ──
+    selectDoctor(state.selectedDoctor);
+    setTimeout(function () {
+      var docKey = state.selectedDoctor === 'female' ? 'elena' : 'james';
+      positionDocGlide(docKey);
+    }, 50);
+
     els.drawerClose.addEventListener('click', closeDrawer);
     els.drawerOverlay.addEventListener('click', closeDrawer);
-    els.drawerNew.addEventListener('click', function () { if (state.messages.length > 0) saveCurrentConv(); newChat(); closeDrawer(); });
+
+    // ── Reposition glide on resize ──
+    window.addEventListener('resize', function () {
+      var docKey = state.selectedDoctor === 'female' ? 'elena' : 'james';
+      positionDocGlide(docKey);
+    });
 
     scrollToBottom();
   }
