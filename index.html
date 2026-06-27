@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitalCare — Your Health, Our Mission</title>
+  <title>HealBuddy — Your Health, Our Mission</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.8/build/spline-viewer.js"></script>
@@ -266,8 +266,8 @@
 
     #hero .container {
       display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 40px;
+      grid-template-columns: 1fr 420px;
+      gap: 48px;
       align-items: center;
       width: 100%;
       max-width: 1160px;
@@ -276,12 +276,27 @@
       z-index: 1;
     }
 
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      padding: 6px 14px;
+      background: var(--accent-dim);
+      border-radius: 100px;
+    }
+
     .hero h1 {
-      font-size: clamp(72px, 10vw, 128px);
+      font-size: clamp(68px, 9vw, 120px);
       font-weight: 800;
       letter-spacing: -3px;
-      line-height: 1.08;
-      margin-bottom: 48px;
+      line-height: 1.06;
+      margin-bottom: 0;
     }
 
     .hero h1 .gradient {
@@ -292,17 +307,20 @@
     }
 
     .hero .hero-sub {
-      font-size: clamp(22px, 3vw, 32px);
+      font-size: clamp(18px, 2.4vw, 24px);
       color: var(--text-secondary);
-      margin-bottom: 56px;
-      line-height: 1.5;
-      max-width: 600px;
+      margin-top: 64px;
+      margin-bottom: 36px;
+      line-height: 1.6;
+      max-width: 540px;
     }
 
     .hero-btns {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      margin-top: 28px;
+      margin-bottom: 40px;
     }
 
     .btn-primary, .btn-secondary {
@@ -340,6 +358,11 @@
     }
 
     /* ── Chat Preview ── */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+    }
+
     .chat-preview {
       background: var(--surface);
       border: 1px solid var(--card-border);
@@ -1044,9 +1067,13 @@
       }
 
       .hero h1 { font-size: 52px; text-align: center; }
-      .hero .hero-sub { margin: 0 auto 28px; text-align: center; }
+      .hero .hero-sub { margin: 0 auto 28px; text-align: center; max-width: 420px; }
       .hero-text { text-align: center; }
+      .hero-label { margin-left: auto; margin-right: auto; }
       .hero-btns { justify-content: center; }
+
+
+      .hero-right { max-width: 420px; margin: 0 auto; }
 
       .features-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -1059,6 +1086,7 @@
 
       .hero h1 { font-size: 36px; letter-spacing: -1.5px; }
       .hero .hero-sub { font-size: 15px; max-width: 320px; }
+
 
       .steps { grid-template-columns: 1fr; }
       .steps::before { display: none; }
@@ -1077,6 +1105,7 @@
     @media (max-width: 480px) {
       .hero h1 { font-size: 30px; letter-spacing: -1px; }
       .hero .hero-sub { font-size: 13px; max-width: 240px; }
+
       .doctor-card { flex-direction: column; align-items: center; text-align: center; }
     }
 
@@ -1098,7 +1127,7 @@
   <nav id="nav">
     <div class="logo">
       <span class="mark">+</span>
-      <span><span class="accent">Vital</span>Care</span>
+      <span>HealBuddy</span>
     </div>
     <div class="links">
       <a href="#hero">Home</a>
@@ -1128,32 +1157,36 @@
       <div class="hero-scroll-content">
         <div class="container">
           <div class="hero-text">
+            <div class="hero-label">AI-Powered Healthcare</div>
             <h1>Your Health<br><span class="gradient">Intelligence</span></h1>
-            <p class="hero-sub">AI-powered medical guidance, from the doctors you trust.</p>
+            <p class="hero-sub">AI-powered medical guidance, from the doctors you trust. Get instant advice, symptom analysis, and peace of mind — anytime, anywhere.</p>
             <div class="hero-btns">
               <button class="btn-primary chat-trigger">Start Consultation →</button>
+              <a href="#how" class="btn-secondary">How It Works</a>
             </div>
           </div>
-          <div class="chat-preview" id="hero-chat">
-            <div class="chat-preview-header">
-              <div class="cph-avatars">
-                <img src="chat-widget/dr-sarah.png" alt="Dr. Elena" class="cph-avatar">
-                <img src="chat-widget/dr-james.png" alt="Dr. James" class="cph-avatar">
+          <div class="hero-right">
+            <div class="chat-preview" id="hero-chat">
+              <div class="chat-preview-header">
+                <div class="cph-avatars">
+                  <img src="chat-widget/dr-sarah.png" alt="Dr. Elena" class="cph-avatar">
+                  <img src="chat-widget/dr-james.png" alt="Dr. James" class="cph-avatar">
+                </div>
+                <div class="info">
+                  <div class="name">Dr. Elena & Dr. James</div>
+                  <div class="status">Online</div>
+                </div>
               </div>
-              <div class="info">
-                <div class="name">Dr. Elena & Dr. James</div>
-                <div class="status">Online</div>
+              <div class="chat-preview-body" id="hero-chat-body">
+                <div class="msg user">I've had a headache for 3 days. What should I do?</div>
+                <div class="msg doc" data-doctor="elena"><img src="chat-widget/dr-sarah.png" class="d-mini" alt="Dr. Elena"><span>That sounds uncomfortable! Can you describe the pain — is it throbbing or constant? Any other symptoms like nausea or light sensitivity?</span></div>
+                <div class="msg user">It's throbbing, on the right side. Light hurts.</div>
+                <div class="msg doc" data-doctor="james"><img src="chat-widget/dr-james.png" class="d-mini" alt="Dr. James"><span>Classic migraine pattern. Rest in a dark room, hydrate, and try ibuprofen. If it persists beyond 48 hours or you've never had this before, see a GP.</span></div>
               </div>
-            </div>
-            <div class="chat-preview-body" id="hero-chat-body">
-              <div class="msg user">I've had a headache for 3 days. What should I do?</div>
-              <div class="msg doc" data-doctor="elena"><img src="chat-widget/dr-sarah.png" class="d-mini" alt="Dr. Elena"><span>That sounds uncomfortable! Can you describe the pain — is it throbbing or constant? Any other symptoms like nausea or light sensitivity?</span></div>
-              <div class="msg user">It's throbbing, on the right side. Light hurts.</div>
-              <div class="msg doc" data-doctor="james"><img src="chat-widget/dr-james.png" class="d-mini" alt="Dr. James"><span>Classic migraine pattern. Rest in a dark room, hydrate, and try ibuprofen. If it persists beyond 48 hours or you've never had this before, see a GP.</span></div>
-            </div>
-            <div class="chat-preview-footer">
-              <div class="input-placeholder">Ask a follow-up...</div>
-              <div class="send-placeholder">↑</div>
+              <div class="chat-preview-footer">
+                <div class="input-placeholder">Ask a follow-up...</div>
+                <div class="send-placeholder">↑</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1208,7 +1241,7 @@
   <section id="features">
     <div class="container">
       <div class="section-header">
-        <div class="section-label reveal">Why VitalCare</div>
+        <div class="section-label reveal">Why HealBuddy</div>
         <h2 class="section-title reveal reveal-delay-1">Everything You Need</h2>
         <p class="section-sub reveal reveal-delay-2">A comprehensive healthcare companion designed to put medical expertise at your fingertips.</p>
       </div>
@@ -1282,7 +1315,7 @@
       <div class="section-header">
         <div class="section-label">Patient Stories</div>
         <h2 class="section-title">Loved by Thousands</h2>
-        <p class="section-sub">Hear from people who transformed their healthcare experience with VitalCare.</p>
+        <p class="section-sub">Hear from people who transformed their healthcare experience with HealBuddy.</p>
       </div>
       <div class="test-col-grid" id="test-col-grid">
         <!-- columns injected by JS -->
@@ -1298,7 +1331,7 @@
     </div>
     <div class="container">
       <h2 class="reveal">Ready to Transform<br>Your Healthcare?</h2>
-      <p class="reveal reveal-delay-1">Join thousands of patients who've made VitalCare their trusted health companion. Start your journey in seconds.</p>
+      <p class="reveal reveal-delay-1">Join thousands of patients who've made HealBuddy their trusted health companion. Start your journey in seconds.</p>
       <button class="btn-primary chat-trigger reveal reveal-delay-2">💬 Start Your Consultation</button>
     </div>
   </section>
@@ -1306,7 +1339,7 @@
   <!-- ═══ FOOTER ═══ -->
   <footer>
     <div class="container">
-      <p>&copy; 2026 VitalCare. For reference only, not medical advice.</p>
+      <p>&copy; 2026 HealBuddy. For reference only, not medical advice.</p>
       <div class="f-links">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Service</a>
