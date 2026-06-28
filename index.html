@@ -1459,15 +1459,18 @@
 
       // ── Hide Spline branding ──
       document.querySelector('spline-viewer')?.addEventListener('load', function () {
-        try {
-          var root = this.shadowRoot;
-          if (root) {
-            var badge = root.querySelector('.logo');
-            if (badge) badge.remove();
-            var splash = root.querySelector('.splash');
-            if (splash) splash.remove();
-          }
-        } catch (e) {}
+        function scrub(root) {
+          if (!root) return;
+          root.querySelectorAll('a').forEach(function (a) {
+            if (a.href && a.href.includes('spline.design')) a.remove();
+          });
+          root.querySelectorAll('*').forEach(function (el) {
+            if (el.children.length === 0 && el.textContent.trim() === 'Spline') el.remove();
+          });
+        }
+        scrub(this.shadowRoot);
+        var obs = new MutationObserver(function () { scrub(this.shadowRoot); }.bind(this));
+        obs.observe(this.shadowRoot, { childList: true, subtree: true });
       });
 
       // ── 3D Scroll effect (all sections) ──
