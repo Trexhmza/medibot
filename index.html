@@ -1461,11 +1461,19 @@
       document.querySelector('spline-viewer')?.addEventListener('load', function () {
         function scrub(root) {
           if (!root) return;
+          // Remove any link that points to Spline
           root.querySelectorAll('a').forEach(function (a) {
-            if (a.href && a.href.includes('spline.design')) a.remove();
+            if (a.href && a.href.includes('spline.design')) {
+              a.remove();
+              return;
+            }
           });
+          // Remove badges/icons that contain "Spline" text
           root.querySelectorAll('*').forEach(function (el) {
-            if (el.children.length === 0 && el.textContent.trim() === 'Spline') el.remove();
+            if (el.textContent && el.textContent.trim().includes('Spline')) {
+              var parent = el.closest('a');
+              (parent || el).remove();
+            }
           });
         }
         scrub(this.shadowRoot);
