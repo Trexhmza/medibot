@@ -58,9 +58,10 @@
       pointer-events: none;
       z-index: 1;
       background: radial-gradient(
-        ellipse 800px 100% at 50% 50%,
-        rgba(7,7,14,0.5) 0%,
-        transparent 65%
+        ellipse 1000px 100% at 50% 50%,
+        rgba(7,7,14,0.4) 0%,
+        rgba(7,7,14,0.1) 45%,
+        transparent 80%
       );
     }
 
@@ -90,9 +91,19 @@
       justify-content: space-between;
       padding: 0 24px;
       height: 64px;
-      border-bottom: 1px solid var(--card-border);
+      position: relative;
+      z-index: 3;
       flex-shrink: 0;
       background: rgba(8,8,14,0.55);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -12px; left: 0; right: 0;
+      height: 12px;
+      background: linear-gradient(to bottom, rgba(8,8,14,0.2), transparent);
+      pointer-events: none;
     }
 
     header .left, header .right { flex: 1; display: flex; align-items: center; gap: 12px; }
@@ -1203,12 +1214,18 @@
         var d = dots[i];
         d.y += d.vy;
         d.x += d.vx;
-        if (d.y < -10) { d.y = H + 10; d.x = Math.random() * W; }
+        if (d.y < -20) { d.y = H + 20; d.x = Math.random() * W; }
         if (d.x < -10) d.x = W + 10;
         if (d.x > W + 10) d.x = -10;
+
+        var fade = 1;
+        if (d.y < 30) fade = d.y / 30;
+        if (d.y > H - 30) fade = (H - d.y) / 30;
+        if (fade < 0) fade = 0;
+
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.s, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + d.hue + ',' + d.a + ')';
+        ctx.fillStyle = 'rgba(' + d.hue + ',' + (d.a * fade) + ')';
         ctx.fill();
       }
 
@@ -1218,11 +1235,16 @@
         cr.y += cr.vy;
         cr.x += cr.vx;
         cr.rot += cr.rs;
-        if (cr.y < -40) { cr.y = H + 40; cr.x = Math.random() * W; }
+        if (cr.y < -50) { cr.y = H + 50; cr.x = Math.random() * W; }
         if (cr.x < -40) cr.x = W + 40;
         if (cr.x > W + 40) cr.x = -40;
 
-        var pulseA = cr.a * (0.8 + 0.2 * Math.sin(time * 1.2 + i));
+        var crossFade = 1;
+        if (cr.y < 40) crossFade = cr.y / 40;
+        if (cr.y > H - 40) crossFade = (H - cr.y) / 40;
+        if (crossFade < 0) crossFade = 0;
+
+        var pulseA = cr.a * (0.8 + 0.2 * Math.sin(time * 1.2 + i)) * crossFade;
         ctx.save();
         ctx.translate(cr.x, cr.y);
         ctx.rotate(cr.rot);
